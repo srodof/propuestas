@@ -1,0 +1,4 @@
+# Hostinger (LiteSpeed/Apache): página 404 propia de Astro
+ErrorDocument 404 /404.html
+DirectoryIndex index.html
+Options -Indexes

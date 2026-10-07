@@ -1,0 +1,15 @@
+---
+import { getCollection, render } from 'astro:content';
+import Propuesta from '../layouts/Propuesta.astro';
+
+export async function getStaticPaths() {
+  const propuestas = await getCollection('propuestas');
+  return propuestas.map((p) => ({ params: { slug: p.id }, props: { p } }));
+}
+
+const { p } = Astro.props;
+const { Content } = await render(p);
+---
+<Propuesta data={p.data}>
+  <Content />
+</Propuesta>

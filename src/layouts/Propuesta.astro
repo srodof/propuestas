@@ -1,0 +1,146 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  data: CollectionEntry<'propuestas'>['data'];
+}
+
+const { data } = Astro.props;
+const fmt = new Intl.DateTimeFormat('es-BO', { day: 'numeric', month: 'long', year: 'numeric' });
+const vence = new Date(data.fecha);
+vence.setDate(vence.getDate() + data.vigenciaDias);
+const wa = data.contacto.whatsapp?.replace(/\D/g, '');
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{data.titulo} · {data.cliente} · SWIITCH</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Jost:ital,wght@0,400;0,500;0,700;1,500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="portada">
+      <div class="wrap">
+        <p class="marca">SWIITCH</p>
+        <p class="etiqueta">Propuesta para {data.cliente}</p>
+        <h1>{data.titulo}</h1>
+        <p class="meta">{fmt.format(data.fecha)} · Válida hasta el {fmt.format(vence)}</p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section>
+        <h2>Resumen</h2>
+        <p class="lead">{data.resumen}</p>
+      </section>
+
+      {data.objetivos.length > 0 && (
+        <section>
+          <h2>Objetivos</h2>
+          <ol class="objetivos">{data.objetivos.map((o) => <li>{o}</li>)}</ol>
+        </section>
+      )}
+
+      {data.servicios.length > 0 && (
+        <section>
+          <h2>Qué haremos</h2>
+          <div class="servicios">
+            {data.servicios.map((s) => (
+              <article>
+                <h3>{s.nombre}</h3>
+                <p>{s.descripcion}</p>
+                {s.precio && <p class="precio">{s.precio}</p>}
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {data.cronograma.length > 0 && (
+        <section>
+          <h2>Cronograma</h2>
+          <ol class="cronograma">
+            {data.cronograma.map((c) => (
+              <li>
+                <span class="dur">{c.duracion}</span>
+                <strong>{c.fase}</strong>
+                <p>{c.detalle}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <section class="extra">
+        <slot />
+      </section>
+
+      <section class="inversion">
+        <h2>Inversión</h2>
+        <p class="total">{data.inversion.moneda} {data.inversion.total}</p>
+        {data.inversion.notas.length > 0 && (
+          <ul>{data.inversion.notas.map((n) => <li>{n}</li>)}</ul>
+        )}
+      </section>
+    </main>
+
+    <footer class="cierre">
+      <div class="wrap">
+        <h2>¿Avanzamos?</h2>
+        <p>{data.contacto.nombre} · <a href={`mailto:${data.contacto.email}`}>{data.contacto.email}</a></p>
+        {wa && <a class="cta" href={`https://wa.me/${wa}`}>Escribir por WhatsApp</a>}
+      </div>
+    </footer>
+
+    <style is:global>
+      :root {
+        --magenta: #ff3050;
+        --navy: #12142b;
+        --texto: #1a1a1a;
+        --gris: #5b5b66;
+        --linea: #e6e6ea;
+        --titulo: 'Poppins', 'Century Gothic', sans-serif;
+        --cuerpo: 'Jost', 'Futura', 'Century Gothic', sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #fff; color: var(--texto); font: 400 1.0625rem/1.65 var(--cuerpo); }
+      .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+      h1, h2, .marca { font-family: var(--titulo); font-weight: 800; text-transform: uppercase; letter-spacing: 0.01em; }
+      h2 { color: var(--magenta); font-size: 1.5rem; margin: 0 0 0.5rem; }
+      h2::after { content: ''; display: block; width: 64px; margin-top: 0.5rem; border-bottom: 3px dotted var(--magenta); }
+      h3 { font-weight: 700; margin: 0 0 0.25rem; }
+      section { padding: 3rem 0; border-bottom: 1px solid var(--linea); }
+      .portada { background: var(--navy); color: #fff; padding: 4rem 0 5rem; position: relative; overflow: hidden; }
+      .portada::after { content: ''; position: absolute; right: -10%; bottom: -40%; width: 55%; height: 140%; background: var(--magenta); transform: skewX(-20deg); opacity: 0.9; }
+      .portada .wrap { position: relative; z-index: 1; }
+      @media (max-width: 600px) { .portada::after { width: 40%; right: -25%; } }
+      .marca { font-size: 1.25rem; margin: 0 0 3rem; }
+      .etiqueta { font-style: italic; font-weight: 500; margin: 0; }
+      .portada h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.05; margin: 0.5rem 0 1rem; max-width: 18ch; }
+      .meta { color: #c9cad6; margin: 0; }
+      .lead { font-size: 1.25rem; max-width: 60ch; }
+      .objetivos { padding-left: 1.25rem; }
+      .objetivos li::marker { color: var(--magenta); font-weight: 700; }
+      .servicios { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 1.5rem; }
+      .servicios article { border: 1px solid var(--linea); border-top: 4px solid var(--magenta); padding: 1.25rem; border-radius: 2px; }
+      .servicios p { margin: 0; color: var(--gris); }
+      .servicios .precio { color: var(--texto); font-weight: 700; margin-top: 0.75rem; }
+      .cronograma { list-style: none; padding: 0; margin: 1.5rem 0 0; }
+      .cronograma li { padding: 1rem 0 1rem 1.25rem; border-left: 3px solid var(--magenta); margin-bottom: 0.5rem; }
+      .cronograma p { margin: 0.25rem 0 0; color: var(--gris); }
+      .dur { display: inline-block; background: var(--magenta); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 2px 8px; margin-right: 0.5rem; }
+      .extra:empty { display: none; }
+      .total { font-family: var(--titulo); font-weight: 800; font-size: clamp(2rem, 7vw, 3rem); margin: 1rem 0; }
+      .inversion ul { color: var(--gris); padding-left: 1.25rem; }
+      .cierre { background: var(--magenta); color: #fff; padding: 3rem 0; }
+      .cierre h2 { color: #fff; }
+      .cierre h2::after { border-color: #fff; }
+      .cierre a { color: #fff; }
+      .cta { display: inline-block; margin-top: 1rem; background: #fff; color: var(--magenta) !important; font-weight: 700; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 2px; }
+    </style>
+  </body>
+</html>
