@@ -1,6 +1,8 @@
 ---
-# Plantilla mínima: copia este archivo, renómbralo (el nombre es la URL)
-# y llena los campos. Los bloques opcionales que no uses no se muestran.
+# Plantilla: cópiala a src/content/propuestas/MM-YY/nombre-del-cliente.md
+# (MM-YY = mes y año de la fecha de abajo) y llena los campos.
+# Las imágenes van en public/propuestas/MM-YY/nombre-del-cliente/.
+# Los bloques opcionales que no uses no se muestran.
 cliente: Cliente de Ejemplo
 titulo: Estrategia de marketing digital
 bajada: Una frase corta que resuma lo que proponemos.

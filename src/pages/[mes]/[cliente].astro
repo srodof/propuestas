@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Propuesta from '../../layouts/Propuesta.astro';
+
+// Cada propuesta vive en src/content/propuestas/MM-YY/cliente.md
+// y se publica en /MM-YY/cliente/ (p. ej. /05-26/urubo-golf/).
+export async function getStaticPaths() {
+  const propuestas = await getCollection('propuestas');
+  return propuestas.map((p) => {
+    const m = p.id.match(/^(\d{2})-(\d{2})\/([a-z0-9-]+)$/);
+    if (!m) {
+      throw new Error(`"${p.id}": guarda la propuesta como src/content/propuestas/MM-YY/nombre-del-cliente.md`);
+    }
+    const [, mm, yy, cliente] = m;
+    const f = p.data.fecha;
+    const esperado = `${String(f.getUTCMonth() + 1).padStart(2, '0')}-${String(f.getUTCFullYear()).slice(-2)}`;
+    if (`${mm}-${yy}` !== esperado) {
+      throw new Error(`"${p.id}": la carpeta ${mm}-${yy} no coincide con la fecha de la propuesta (${esperado}).`);
+    }
+    return { params: { mes: `${mm}-${yy}`, cliente }, props: { p } };
+  });
+}
+
+const { p } = Astro.props;
+---
+<Propuesta data={p.data} />

@@ -4,19 +4,19 @@ titulo: Branding & Social Media Marketing
 bajada: Un rebranding completo y una estrategia de marketing digital para acompañar la nueva etapa del club.
 fecha: 2026-05-15
 vigenciaDias: 15
-logoCliente: /propuestas/urubo-golf/logo.jpg
-imagenHero: /propuestas/urubo-golf/hero.jpg
+logoCliente: /propuestas/05-26/urubo-golf/logo.jpg
+imagenHero: /propuestas/05-26/urubo-golf/hero.jpg
 
 situacion:
   - Urubó Golf Country Club es un referente en nuestro medio. Actualmente se encuentra en un proceso de innovación y expansión del club, y desea aplicar un rebranding que le permita mostrar todos los cambios que tiene planificados.
   - Por estas razones, busca una agencia de marketing que lo acompañe en el desarrollo de un nuevo logo y manual de marca, y en la ejecución de una estrategia de comunicación para las principales redes sociales del país.
 requerimiento: Urubó Golf Country Club requiere un rebranding completo que incluya su logo y manual de marca, así como una estrategia integral de marketing digital alineada a sus objetivos.
-imagenRequerimiento: /propuestas/urubo-golf/requerimiento.jpg
+imagenRequerimiento: /propuestas/05-26/urubo-golf/requerimiento.jpg
 
 modulos:
   - titulo: Branding
     subtitulo: Identidad que conecta
-    imagen: /propuestas/urubo-golf/branding.jpg
+    imagen: /propuestas/05-26/urubo-golf/branding.jpg
     estrategia: El branding no es solo un logo, es el alma del proyecto. Creamos marcas desde su esencia, con propósito, visión y estética, construyendo una base sólida sobre la cual crecerá toda la comunicación y el posicionamiento de la marca. Esta identidad será el punto de partida para cada acción, campaña o interacción futura.
     incluye:
       - "Diseño de logo: creación de una identidad visual moderna y profesional."
@@ -47,7 +47,7 @@ modulos:
 
   - titulo: Social Media Marketing
     subtitulo: Conectando con tu audiencia
-    imagen: /propuestas/urubo-golf/meta.jpg
+    imagen: /propuestas/05-26/urubo-golf/meta.jpg
     estrategia: Desarrollaremos una estructura de contenido alineada a autoridad, educación y conversión. No se publicará por presencia, sino bajo una estrategia clara de posicionamiento y captación, con embudos específicos según tipo de servicio y público.
     enfoque: Proyectaremos una imagen moderna, profesional y accesible, manteniendo siempre autoridad y claridad.
     incluye:
@@ -63,7 +63,7 @@ modulos:
 
   - titulo: Producción fotográfica mensual
     subtitulo: Una biblioteca visual propia
-    imagen: /propuestas/urubo-golf/fotografia.webp
+    imagen: /propuestas/05-26/urubo-golf/fotografia.webp
     estrategia: Para reemplazar el uso de imágenes genéricas y construir una identidad visual más auténtica, proponemos un servicio de producción fotográfica mensual con sesiones de personas reales, en contextos cotidianos, en el mismo club.
     incluye:
       - Reforzar la humanización de la marca.

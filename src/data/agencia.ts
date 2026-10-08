@@ -11,7 +11,7 @@ export const agencia = {
       'Desarrollamos y ejecutamos estrategias digitales y tradicionales: desde diseño web y marketing en redes sociales hasta manejo de influencers, relaciones públicas, eventos corporativos, BTL y activaciones en puntos de venta.',
     mision:
       'Nuestra misión es clara: alcanzar y superar los objetivos de nuestros clientes, ya sean de marca, ventas o cualquier otro objetivo crucial para su éxito.',
-    imagen: '/propuestas/urubo-golf/equipo.jpg',
+    imagen: '/marca/equipo.jpg',
   },
 
   // Tres diferenciales que se muestran justo debajo del hero
