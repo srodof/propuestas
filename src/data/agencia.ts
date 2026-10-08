@@ -14,6 +14,25 @@ export const agencia = {
     imagen: '/propuestas/urubo-golf/equipo.jpg',
   },
 
+  // Tres diferenciales que se muestran justo debajo del hero
+  diferenciales: [
+    {
+      icono: 'users',
+      titulo: 'Socios directores en tu cuenta',
+      texto: 'Nuestros directores, con más de 15 años de experiencia en marcas locales e internacionales, participan en cada definición de tu proyecto.',
+    },
+    {
+      icono: 'target',
+      titulo: 'Estrategias a medida',
+      texto: 'No vendemos paquetes genéricos: diseñamos cada solución para el desafío específico de tu empresa y te acompañamos en la ejecución.',
+    },
+    {
+      icono: 'bar-chart',
+      titulo: 'Resultados medibles',
+      texto: 'Lo que no se mide no se puede mejorar. Medimos KPIs y el retorno de tu inversión, y te reportamos cada mes.',
+    },
+  ],
+
   cifras: [
     { valor: 15, sufijo: '+', etiqueta: 'Años de experiencia' },
     { valor: 30, sufijo: '+', etiqueta: 'Marcas que confían en nosotros' },

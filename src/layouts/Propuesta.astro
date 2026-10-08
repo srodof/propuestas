@@ -98,19 +98,16 @@ const nav = [
         </div>
       </section>
 
-      <!-- Resumen de la propuesta: tarjetas que suben sobre el hero -->
-      {data.modulos.length > 0 && (
-        <div class="wrap resumen">
-          {data.modulos.map((m, i) => (
-            <a class="tarjeta tarjeta--fill" href={`#${slug(m.titulo)}`} data-reveal="up" style={`--d:${i * 120}ms`}>
-              <span class="tarjeta__num">{dos(i)}</span>
-              <h3>{m.titulo}</h3>
-              {m.subtitulo && <p>{m.subtitulo}</p>}
-              <span class="tarjeta__mas">Ver detalle <Icon name="chevron-right" size={16} /></span>
-            </a>
-          ))}
-        </div>
-      )}
+      <!-- Diferenciales de SWIITCH: tarjetas que suben sobre el hero -->
+      <div class="wrap resumen" aria-label="Por qué SWIITCH">
+        {agencia.diferenciales.map((d, i) => (
+          <article class="tarjeta tarjeta--fill" tabindex="0" data-reveal="up" style={`--d:${i * 120}ms`}>
+            <span class="tarjeta__icono"><Icon name={d.icono} size={44} stroke={1.5} /></span>
+            <h3>{d.titulo}</h3>
+            <p>{d.texto}</p>
+          </article>
+        ))}
+      </div>
 
       <!-- 2. Nosotros -->
       {ver('nosotros') && (
@@ -583,7 +580,7 @@ const nav = [
       .tarjeta--fill::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--primary); transform: scaleY(0); transform-origin: bottom; transition: transform 0.45s var(--ease); }
       .tarjeta--fill:hover::before, .tarjeta--fill:focus-visible::before { transform: scaleY(1); }
       .tarjeta--fill:hover, .tarjeta--fill:hover h3, .tarjeta--fill:hover .tarjeta__icono, .tarjeta--fill:hover .tarjeta__num, .tarjeta--fill:hover .tarjeta__mas,
-      .tarjeta--fill:focus-visible, .tarjeta--fill:focus-visible h3 { color: #fff; }
+      .tarjeta--fill:focus-visible, .tarjeta--fill:focus-visible h3, .tarjeta--fill:focus-visible .tarjeta__icono { color: #fff; }
       .tarjeta, .tarjeta h3, .tarjeta__icono, .tarjeta__num, .tarjeta__mas { transition: color 0.3s ease; }
       .tarjeta p { margin: 0.25rem 0 0; }
       .tarjeta__num { font: 400 32px/1 var(--font-display); color: var(--primary); display: block; margin-bottom: 18px; }
