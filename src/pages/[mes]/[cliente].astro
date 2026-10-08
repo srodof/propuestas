@@ -2,14 +2,15 @@
 import { getCollection } from 'astro:content';
 import Propuesta from '../../layouts/Propuesta.astro';
 
-// Cada propuesta vive en src/content/propuestas/MM-YY/cliente.md
-// y se publica en /MM-YY/cliente/ (p. ej. /05-26/urubo-golf/).
+// Cada propuesta vive en src/content/propuestas/MM-YY/cliente-codigo.md
+// y se publica en /MM-YY/cliente-codigo/ (p. ej. /05-26/urubo-golf-s64q/).
 export async function getStaticPaths() {
   const propuestas = await getCollection('propuestas');
   return propuestas.map((p) => {
-    const m = p.id.match(/^(\d{2})-(\d{2})\/([a-z0-9-]+)$/);
+    // El nombre termina en un código de 4 caracteres para que la URL no se pueda adivinar.
+    const m = p.id.match(/^(\d{2})-(\d{2})\/([a-z0-9-]+-[a-z0-9]{4})$/);
     if (!m) {
-      throw new Error(`"${p.id}": guarda la propuesta como src/content/propuestas/MM-YY/nombre-del-cliente.md`);
+      throw new Error(`"${p.id}": guarda la propuesta como src/content/propuestas/MM-YY/nombre-del-cliente-xxxx.md (usa npm run nueva).`);
     }
     const [, mm, yy, cliente] = m;
     const f = p.data.fecha;

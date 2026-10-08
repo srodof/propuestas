@@ -1,7 +1,8 @@
 ---
-# Plantilla: cópiala a src/content/propuestas/MM-YY/nombre-del-cliente.md
-# (MM-YY = mes y año de la fecha de abajo) y llena los campos.
-# Las imágenes van en public/propuestas/MM-YY/nombre-del-cliente/.
+# Plantilla: crea una propuesta nueva con  npm run nueva -- "Nombre del cliente"
+# Eso la copia a src/content/propuestas/MM-YY/nombre-del-cliente-xxxx.md
+# (xxxx es un código al azar) y crea la carpeta de imágenes
+# public/propuestas/MM-YY/nombre-del-cliente-xxxx/.
 # Los bloques opcionales que no uses no se muestran.
 cliente: Cliente de Ejemplo
 titulo: Estrategia de marketing digital
