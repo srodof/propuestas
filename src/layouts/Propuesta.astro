@@ -11,6 +11,8 @@ const { data } = Astro.props;
 const fmt = new Intl.DateTimeFormat('es-BO', { day: 'numeric', month: 'long', year: 'numeric' });
 const vence = new Date(data.fecha);
 vence.setDate(vence.getDate() + data.vigenciaDias);
+const mes = new Intl.DateTimeFormat('es-BO', { month: 'long', timeZone: 'UTC' }).format(data.fecha);
+const mesAnio = `${mes.charAt(0).toUpperCase()}${mes.slice(1)} ${data.fecha.getUTCFullYear()}`;
 const ver = (s: string) => !data.ocultar.includes(s as never);
 const dos = (n: number) => String(n + 1).padStart(2, '0');
 const slug = (s: string) =>
@@ -77,7 +79,7 @@ const nav = [
             <h1 class="hero__titulo" data-reveal="up" style="--d:120ms">{data.titulo}</h1>
             {data.bajada && <p class="hero__bajada" data-reveal="up" style="--d:240ms">{data.bajada}</p>}
             <p class="hero__meta" data-reveal="up" style="--d:320ms">
-              {fmt.format(data.fecha)} · Válida hasta el {fmt.format(vence)}
+              {mesAnio}
             </p>
           </div>
           {data.imagenHero && (
