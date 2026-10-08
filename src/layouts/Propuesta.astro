@@ -1,5 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import Icon from '../components/Icon.astro';
+import { agencia, nombresClientes } from '../data/agencia';
 
 interface Props {
   data: CollectionEntry<'propuestas'>['data'];
@@ -9,7 +11,24 @@ const { data } = Astro.props;
 const fmt = new Intl.DateTimeFormat('es-BO', { day: 'numeric', month: 'long', year: 'numeric' });
 const vence = new Date(data.fecha);
 vence.setDate(vence.getDate() + data.vigenciaDias);
-const wa = data.contacto.whatsapp?.replace(/\D/g, '');
+const ver = (s: string) => !data.ocultar.includes(s as never);
+const dos = (n: number) => String(n + 1).padStart(2, '0');
+const slug = (s: string) =>
+  s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+const { contacto } = agencia;
+const mensaje = encodeURIComponent(`Hola SWIITCH, quiero avanzar con la propuesta "${data.titulo}" para ${data.cliente}.`);
+const whatsapp = `https://wa.me/${contacto.whatsapp}?text=${mensaje}`;
+const logo = (id: string) => ({ src: `/clientes/${id}.webp`, alt: nombresClientes[id] ?? id });
+
+const nav = [
+  ver('nosotros') && { href: '#nosotros', label: 'Nosotros' },
+  { href: '#situacion', label: 'Situación' },
+  data.modulos.length > 0 && { href: '#propuesta', label: 'Propuesta' },
+  data.kickoff.length > 0 && { href: '#kickoff', label: 'Kick off' },
+  { href: '#inversion', label: 'Inversión' },
+  { href: '#contacto', label: 'Contacto' },
+].filter(Boolean) as { href: string; label: string }[];
 ---
 <!doctype html>
 <html lang="es">
@@ -18,129 +37,693 @@ const wa = data.contacto.whatsapp?.replace(/\D/g, '');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
     <title>{data.titulo} · {data.cliente} · SWIITCH</title>
+    <link rel="icon" type="image/png" href="/marca/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Jost:ital,wght@0,400;0,500;0,700;1,500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="preload" href="/fonts/Heavitas.ttf" as="font" type="font/ttf" crossorigin />
+    <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
-    <header class="portada">
-      <div class="wrap">
-        <p class="marca">SWIITCH</p>
-        <p class="etiqueta">Propuesta para {data.cliente}</p>
-        <h1>{data.titulo}</h1>
-        <p class="meta">{fmt.format(data.fecha)} · Válida hasta el {fmt.format(vence)}</p>
+    <div class="progreso" aria-hidden="true"><span></span></div>
+
+    <!-- Menú fijo: transparente sobre el hero, blanco al hacer scroll -->
+    <header class="nav" data-nav>
+      <div class="nav__in">
+        <a class="nav__logo" href="#inicio" aria-label="SWIITCH, ir al inicio">
+          <img src="/marca/swiitch-rojo.png" alt="SWIITCH" width="132" height="40" />
+        </a>
+        <nav class="nav__links" id="menu" aria-label="Secciones">
+          {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+          <a class="btn btn--sm nav__cta" href={whatsapp} target="_blank" rel="noopener">
+            Aceptar propuesta <Icon name="chevron-right" size={18} />
+          </a>
+        </nav>
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú" data-menu>
+          <Icon name="menu" />
+        </button>
       </div>
     </header>
 
-    <main class="wrap">
-      <section>
-        <h2>Resumen</h2>
-        <p class="lead">{data.resumen}</p>
+    <main>
+      <!-- 1. Hero -->
+      <section class="hero" id="inicio">
+        <div class="wrap hero__grid">
+          <div class="hero__texto">
+            <p class="eyebrow eyebrow--dark" data-reveal="left">
+              <span class="switch" aria-hidden="true"><span></span></span>
+              Propuesta para {data.cliente}
+            </p>
+            <h1 class="hero__titulo" data-reveal="up" style="--d:120ms">{data.titulo}</h1>
+            {data.bajada && <p class="hero__bajada" data-reveal="up" style="--d:240ms">{data.bajada}</p>}
+            <p class="hero__meta" data-reveal="up" style="--d:320ms">
+              {fmt.format(data.fecha)} · Válida hasta el {fmt.format(vence)}
+            </p>
+            <div class="hero__ctas" data-reveal="up" style="--d:400ms">
+              <a class="btn btn--slider" href={data.modulos.length ? '#propuesta' : '#situacion'}>
+                Ver la propuesta <Icon name="chevron-right" size={20} />
+              </a>
+            </div>
+          </div>
+          {data.imagenHero && (
+            <div class="hero__media" data-reveal="right" style="--d:200ms">
+              <div class="foto foto--acento">
+                <img src={data.imagenHero} alt={data.cliente} width="800" height="600" fetchpriority="high" />
+              </div>
+              {data.logoCliente && (
+                <div class="hero__logo"><img src={data.logoCliente} alt={`Logo de ${data.cliente}`} /></div>
+              )}
+            </div>
+          )}
+        </div>
       </section>
 
-      {data.objetivos.length > 0 && (
-        <section>
-          <h2>Objetivos</h2>
-          <ol class="objetivos">{data.objetivos.map((o) => <li>{o}</li>)}</ol>
+      <!-- Resumen de la propuesta: tarjetas que suben sobre el hero -->
+      {data.modulos.length > 0 && (
+        <div class="wrap resumen">
+          {data.modulos.map((m, i) => (
+            <a class="tarjeta tarjeta--fill" href={`#${slug(m.titulo)}`} data-reveal="up" style={`--d:${i * 120}ms`}>
+              <span class="tarjeta__num">{dos(i)}</span>
+              <h3>{m.titulo}</h3>
+              {m.subtitulo && <p>{m.subtitulo}</p>}
+              <span class="tarjeta__mas">Ver detalle <Icon name="chevron-right" size={16} /></span>
+            </a>
+          ))}
+        </div>
+      )}
+
+      <!-- 2. Nosotros -->
+      {ver('nosotros') && (
+        <section class="seccion" id="nosotros">
+          <div class="wrap dos-col">
+            <div class="nosotros__media" data-reveal="left">
+              <div class="foto foto--acento foto--izq">
+                <img src={agencia.nosotros.imagen} alt="Equipo de SWIITCH trabajando" loading="lazy" />
+              </div>
+              <div class="sello">
+                <strong data-count="15">15</strong><span>+</span>
+                <small>Años de experiencia</small>
+              </div>
+            </div>
+            <div>
+              <p class="eyebrow" data-reveal="right">Quiénes somos</p>
+              <h2 data-reveal="up">{agencia.nosotros.titulo}</h2>
+              <p class="texto" data-reveal="up">{agencia.nosotros.quienesSomos}</p>
+              <p class="texto" data-reveal="up">{agencia.nosotros.queHacemos}</p>
+              <blockquote class="cita" data-reveal="up">{agencia.nosotros.mision}</blockquote>
+            </div>
+          </div>
         </section>
       )}
 
-      {data.servicios.length > 0 && (
-        <section>
-          <h2>Qué haremos</h2>
-          <div class="servicios">
-            {data.servicios.map((s) => (
-              <article>
-                <h3>{s.nombre}</h3>
-                <p>{s.descripcion}</p>
-                {s.precio && <p class="precio">{s.precio}</p>}
-              </article>
+      <!-- Franja de cifras -->
+      {ver('cifras') && (
+        <section class="cifras" aria-label="SWIITCH en cifras">
+          <div class="wrap cifras__grid">
+            {agencia.cifras.map((c, i) => (
+              <div class="cifra" data-reveal="up" style={`--d:${i * 100}ms`}>
+                <p class="cifra__num"><span data-count={c.valor}>{c.valor}</span><em>{c.sufijo}</em></p>
+                <p class="cifra__label">{c.etiqueta}</p>
+              </div>
             ))}
           </div>
         </section>
       )}
 
-      {data.cronograma.length > 0 && (
-        <section>
-          <h2>Cronograma</h2>
-          <ol class="cronograma">
-            {data.cronograma.map((c) => (
-              <li>
-                <span class="dur">{c.duracion}</span>
-                <strong>{c.fase}</strong>
-                <p>{c.detalle}</p>
-              </li>
-            ))}
-          </ol>
+      <!-- 3. Servicios de la agencia -->
+      {ver('servicios') && (
+        <section class="seccion" id="servicios">
+          <div class="wrap">
+            <div class="cabecera">
+              <div>
+                <p class="eyebrow" data-reveal="left">Nuestros servicios</p>
+                <h2 data-reveal="up">Todo lo que tu marca necesita</h2>
+              </div>
+            </div>
+            <div class="grid-3">
+              {agencia.servicios.map((s, i) => (
+                <article class="tarjeta tarjeta--fill" data-reveal="up" style={`--d:${i * 120}ms`}>
+                  <span class="tarjeta__icono"><Icon name={s.icono} size={44} stroke={1.5} /></span>
+                  <h3>{s.area}</h3>
+                  <ul class="lista-simple">{s.items.map((it) => <li>{it}</li>)}</ul>
+                </article>
+              ))}
+            </div>
+          </div>
         </section>
       )}
 
-      <section class="extra">
-        <slot />
+      <!-- 4. Clientes -->
+      {ver('clientes') && (
+        <section class="clientes" aria-labelledby="t-clientes">
+          <div class="wrap">
+            <p class="eyebrow eyebrow--centro" id="t-clientes" data-reveal="down">Algunos clientes</p>
+          </div>
+          <div class="marquesina" data-reveal="up">
+            <div class="marquesina__pista">
+              {[0, 1].map((copia) =>
+                agencia.clientes.map((id) => (
+                  <img src={logo(id).src} alt={copia ? '' : logo(id).alt} aria-hidden={copia ? 'true' : undefined} loading="lazy" />
+                )),
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- 5. Cómo trabajamos -->
+      {ver('metodo') && (
+        <section class="seccion seccion--alt" id="metodo">
+          <div class="wrap">
+            <p class="eyebrow" data-reveal="left">Cómo trabajamos</p>
+            <h2 data-reveal="up">Un método que se mide</h2>
+            <ol class="metodo">
+              {agencia.metodo.map((m, i) => (
+                <li data-reveal="up" style={`--d:${i * 140}ms`}>
+                  <span class="metodo__icono"><Icon name={m.icono} size={56} stroke={1.5} /></span>
+                  <span class="metodo__num">{dos(i)}</span>
+                  <h3>{m.titulo}</h3>
+                  <p>{m.texto}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
+      <!-- 6. Situación actual -->
+      <section class="seccion" id="situacion">
+        <div class="wrap estrecho">
+          <p class="eyebrow" data-reveal="left">Situación actual</p>
+          <h2 data-reveal="up">Dónde está {data.cliente} hoy</h2>
+          {data.situacion.map((p) => <p class="texto" data-reveal="up">{p}</p>)}
+        </div>
       </section>
 
-      <section class="inversion">
-        <h2>Inversión</h2>
-        <p class="total">{data.inversion.moneda} {data.inversion.total}</p>
-        {data.inversion.notas.length > 0 && (
-          <ul>{data.inversion.notas.map((n) => <li>{n}</li>)}</ul>
-        )}
+      <!-- 7. Requerimiento -->
+      <section class="banda" style={data.imagenRequerimiento ? `--foto:url(${data.imagenRequerimiento})` : undefined}>
+        <div class="wrap estrecho">
+          <p class="eyebrow eyebrow--dark" data-reveal="left">Requerimiento</p>
+          <p class="banda__texto" data-reveal="up">{data.requerimiento}</p>
+        </div>
+      </section>
+
+      <!-- 8. Propuesta: un módulo por servicio -->
+      {data.modulos.length > 0 && (
+        <section class="seccion" id="propuesta">
+          <div class="wrap">
+            <p class="eyebrow" data-reveal="left">Nuestra propuesta</p>
+            <h2 data-reveal="up">Lo que haremos juntos</h2>
+          </div>
+          {data.modulos.map((m, i) => (
+            <article class:list={['modulo', { 'modulo--inv': i % 2 === 1 }]} id={slug(m.titulo)}>
+              <div class="wrap">
+                <div class="dos-col modulo__cabeza">
+                  {m.imagen && (
+                    <div class="modulo__media" data-reveal={i % 2 ? 'right' : 'left'}>
+                      <div class:list={['foto', 'foto--acento', { 'foto--izq': i % 2 === 0, 'foto--recorte': m.imagen.endsWith('.webp') }]}>
+                        <img src={m.imagen} alt="" loading="lazy" />
+                      </div>
+                    </div>
+                  )}
+                  <div>
+                    <p class="modulo__num" data-reveal="up">{dos(i)}</p>
+                    <h3 class="modulo__titulo" data-reveal="up">{m.titulo}</h3>
+                    {m.subtitulo && <p class="modulo__sub" data-reveal="up">{m.subtitulo}</p>}
+                    {m.estrategia && (
+                      <div class="bloque" data-reveal="up">
+                        <h4>Estrategia</h4>
+                        <p>{m.estrategia}</p>
+                      </div>
+                    )}
+                    {m.enfoque && (
+                      <div class="bloque bloque--rojo" data-reveal="up">
+                        <h4>Enfoque</h4>
+                        <p>{m.enfoque}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {m.incluye.length > 0 && (
+                  <div class="incluye">
+                    <h4 class="sub" data-reveal="up">Qué incluye</h4>
+                    <ul class="checks">
+                      {m.incluye.map((it, k) => (
+                        <li data-reveal="up" style={`--d:${(k % 6) * 70}ms`}><Icon name="check" size={20} />{it}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {m.proceso && (
+                  <div class="extra">
+                    <h4 class="sub" data-reveal="up">{m.proceso.titulo}</h4>
+                    {m.proceso.texto && <p class="texto estrecho-izq" data-reveal="up">{m.proceso.texto}</p>}
+                    <ol class="pasos">
+                      {m.proceso.pasos.map((p, k) => (
+                        <li data-reveal="up" style={`--d:${k * 120}ms`}><span>{k + 1}</span>{p}</li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+
+                {m.checklist && (
+                  <div class="extra">
+                    <h4 class="sub" data-reveal="up">{m.checklist.titulo}</h4>
+                    {m.checklist.texto && <p class="texto estrecho-izq" data-reveal="up">{m.checklist.texto}</p>}
+                    <ul class="checks checks--una">
+                      {m.checklist.items.map((it, k) => (
+                        <li data-reveal="left" style={`--d:${k * 60}ms`}><Icon name="check" size={20} />{it}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {m.casos && (
+                  <div class="extra">
+                    <h4 class="sub" data-reveal="up">{m.casos.titulo}</h4>
+                    {m.casos.texto && <p class="texto estrecho-izq" data-reveal="up">{m.casos.texto}</p>}
+                    <div class="casos">
+                      {m.casos.logos.map((id, k) => (
+                        <img src={logo(id).src} alt={logo(id).alt} loading="lazy" data-reveal="down" style={`--d:${k * 80}ms`} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
+
+      <!-- 9. Kick off -->
+      {data.kickoff.length > 0 && (
+        <section class="seccion kickoff" id="kickoff">
+          <div class="wrap">
+            <p class="eyebrow eyebrow--dark" data-reveal="left">Kick off</p>
+            <h2 data-reveal="up">Pasos para iniciar el proyecto</h2>
+            <ol class="kickoff__pasos">
+              {data.kickoff.map((k, i) => (
+                <li data-reveal="up" style={`--d:${(i % 4) * 110}ms`}>
+                  <span class="kickoff__num">{dos(i)}</span>
+                  <strong>{k.titulo}</strong>
+                  {k.detalle && <p>{k.detalle}</p>}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
+      <!-- 10. Inversión -->
+      <section class="seccion seccion--alt" id="inversion">
+        <div class="wrap">
+          <div class="cabecera">
+            <div>
+              <p class="eyebrow" data-reveal="left">Inversión</p>
+              <h2 data-reveal="up">Planes y honorarios</h2>
+            </div>
+            <p class="texto cabecera__lado" data-reveal="up">Propuesta válida hasta el {fmt.format(vence)}.</p>
+          </div>
+          <div class="precios">
+            {data.inversion.items.map((it, i) => (
+              <article class:list={['precio', { 'precio--destacado': it.destacado }]} data-reveal="up" style={`--d:${i * 120}ms`}>
+                <p class="precio__servicio">{it.servicio}</p>
+                <h3>{it.concepto}</h3>
+                <p class="precio__monto">
+                  <small>{data.inversion.moneda}</small>
+                  <span>{it.monto}</span>
+                  {it.periodo && <small>{it.periodo}</small>}
+                </p>
+                {it.incluye.length > 0 && (
+                  <ul>{it.incluye.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
+                )}
+              </article>
+            ))}
+          </div>
+          {data.inversion.notas.length > 0 && (
+            <ul class="notas" data-reveal="up">{data.inversion.notas.map((n) => <li>{n}</li>)}</ul>
+          )}
+        </div>
+      </section>
+
+      <!-- 11. Cierre -->
+      <section class="banda banda--cierre" id="contacto" style={data.imagenHero ? `--foto:url(${data.imagenHero})` : undefined}>
+        <div class="wrap centro">
+          <p class="eyebrow eyebrow--dark eyebrow--centro" data-reveal="down">Conversemos</p>
+          <h2 class="display" data-reveal="up">¿Avanzamos?</h2>
+          <p class="banda__bajada" data-reveal="up">Cuéntanos qué te pareció la propuesta y coordinamos el kick off.</p>
+          <div class="cierre__ctas" data-reveal="up">
+            <a class="btn btn--slider" href={whatsapp} target="_blank" rel="noopener">
+              Aceptar por WhatsApp <Icon name="chevron-right" size={20} />
+            </a>
+            <a class="enlace-claro" href={`mailto:${contacto.email}?subject=${encodeURIComponent(`Propuesta ${data.cliente}`)}`}>
+              <Icon name="mail" size={18} /> {contacto.email}
+            </a>
+          </div>
+        </div>
       </section>
     </main>
 
-    <footer class="cierre">
-      <div class="wrap">
-        <h2>¿Avanzamos?</h2>
-        <p>{data.contacto.nombre} · <a href={`mailto:${data.contacto.email}`}>{data.contacto.email}</a></p>
-        {wa && <a class="cta" href={`https://wa.me/${wa}`}>Escribir por WhatsApp</a>}
+    <footer class="pie">
+      <div class="wrap pie__grid">
+        <div>
+          <img class="pie__logo" src="/marca/swiitch-footer-rojo.png" alt="SWIITCH" width="160" height="43" loading="lazy" />
+          <p>Agencia de marketing, comunicación, branding y transformación digital.</p>
+        </div>
+        <div>
+          <p class="pie__titulo">Oficina</p>
+          <p class="pie__dato"><Icon name="map-pin" size={18} /><span>{contacto.direccion.map((l) => <>{l}<br /></>)}</span></p>
+        </div>
+        <div>
+          <p class="pie__titulo">Contacto</p>
+          <p class="pie__dato"><Icon name="phone" size={18} /><a href={`tel:+${contacto.whatsapp}`}>{contacto.telefono}</a></p>
+          <p class="pie__dato"><Icon name="mail" size={18} /><a href={`mailto:${contacto.email}`}>{contacto.email}</a></p>
+          <p class="pie__dato"><Icon name="arrow-up-right" size={18} /><a href={contacto.web} target="_blank" rel="noopener">swiitchad.com</a></p>
+        </div>
+      </div>
+      <div class="wrap pie__base">
+        <span>Santa Cruz de la Sierra · Miami</span>
+        <span>Propuesta confidencial para {data.cliente}</span>
       </div>
     </footer>
 
+    <a class="fab" href={whatsapp} target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.42.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.29A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41"/></svg>
+    </a>
+
+    <script is:inline>
+      (() => {
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Entradas al hacer scroll (fade + desplazamiento corto, como la referencia)
+        const items = document.querySelectorAll('[data-reveal]');
+        if (reduce || !('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('visible'));
+        } else {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+            });
+          }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+          items.forEach((el) => io.observe(el));
+        }
+
+        // Contadores que suben de 0 al valor final
+        const counters = document.querySelectorAll('[data-count]');
+        const run = (el) => {
+          const end = Number(el.dataset.count); const t0 = performance.now(); const dur = 1800;
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString('es-BO');
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        };
+        if (!reduce && 'IntersectionObserver' in window) {
+          const co = new IntersectionObserver((entries) => {
+            entries.forEach((e) => { if (e.isIntersecting) { run(e.target); co.unobserve(e.target); } });
+          }, { threshold: 0.6 });
+          counters.forEach((el) => { el.textContent = '0'; co.observe(el); });
+        }
+
+        // Menú: sólido al hacer scroll + barra de progreso
+        const nav = document.querySelector('[data-nav]');
+        const bar = document.querySelector('.progreso span');
+        const onScroll = () => {
+          const y = scrollY;
+          nav.classList.toggle('nav--solida', y > 40);
+          const max = document.documentElement.scrollHeight - innerHeight;
+          bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+        };
+        addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // Menú móvil
+        const btn = document.querySelector('[data-menu]');
+        btn.addEventListener('click', () => {
+          const open = nav.classList.toggle('nav--abierta');
+          btn.setAttribute('aria-expanded', String(open));
+        });
+        document.querySelectorAll('#menu a').forEach((a) => a.addEventListener('click', () => {
+          nav.classList.remove('nav--abierta'); btn.setAttribute('aria-expanded', 'false');
+        }));
+      })();
+    </script>
+
     <style is:global>
+      @font-face { font-family: 'Heavitas'; src: url('/fonts/Heavitas.ttf') format('truetype'); font-weight: 400; font-display: swap; }
       :root {
-        --magenta: #ff3050;
-        --navy: #12142b;
-        --texto: #1a1a1a;
-        --gris: #5b5b66;
-        --linea: #e6e6ea;
-        --titulo: 'Poppins', 'Century Gothic', sans-serif;
-        --cuerpo: 'Jost', 'Futura', 'Century Gothic', sans-serif;
+        --primary: #ff3050; --primary-hover: #e62b48; --primary-active: #cc2640; --on-primary: #fff;
+        --heading: #333; --body: #797979; --surface: #fff; --surface-alt: #f8f8f8; --oscuro: #212121;
+        --overlay: rgba(0, 0, 0, 0.55); --placeholder: #d9d9d9;
+        --font-display: 'Heavitas', 'Montserrat', sans-serif; --font-sans: 'Montserrat', system-ui, sans-serif;
+        --r-xs: 3px; --r-sm: 5px;
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+        --nav-h: 76px;
       }
-      * { box-sizing: border-box; }
-      body { margin: 0; background: #fff; color: var(--texto); font: 400 1.0625rem/1.65 var(--cuerpo); }
-      .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
-      h1, h2, .marca { font-family: var(--titulo); font-weight: 800; text-transform: uppercase; letter-spacing: 0.01em; }
-      h2 { color: var(--magenta); font-size: 1.5rem; margin: 0 0 0.5rem; }
-      h2::after { content: ''; display: block; width: 64px; margin-top: 0.5rem; border-bottom: 3px dotted var(--magenta); }
-      h3 { font-weight: 700; margin: 0 0 0.25rem; }
-      section { padding: 3rem 0; border-bottom: 1px solid var(--linea); }
-      .portada { background: var(--navy); color: #fff; padding: 4rem 0 5rem; position: relative; overflow: hidden; }
-      .portada::after { content: ''; position: absolute; right: -10%; bottom: -40%; width: 55%; height: 140%; background: var(--magenta); transform: skewX(-20deg); opacity: 0.9; }
-      .portada .wrap { position: relative; z-index: 1; }
-      @media (max-width: 600px) { .portada::after { width: 40%; right: -25%; } }
-      .marca { font-size: 1.25rem; margin: 0 0 3rem; }
-      .etiqueta { font-style: italic; font-weight: 500; margin: 0; }
-      .portada h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.05; margin: 0.5rem 0 1rem; max-width: 18ch; }
-      .meta { color: #c9cad6; margin: 0; }
-      .lead { font-size: 1.25rem; max-width: 60ch; }
-      .objetivos { padding-left: 1.25rem; }
-      .objetivos li::marker { color: var(--magenta); font-weight: 700; }
-      .servicios { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 1.5rem; }
-      .servicios article { border: 1px solid var(--linea); border-top: 4px solid var(--magenta); padding: 1.25rem; border-radius: 2px; }
-      .servicios p { margin: 0; color: var(--gris); }
-      .servicios .precio { color: var(--texto); font-weight: 700; margin-top: 0.75rem; }
-      .cronograma { list-style: none; padding: 0; margin: 1.5rem 0 0; }
-      .cronograma li { padding: 1rem 0 1rem 1.25rem; border-left: 3px solid var(--magenta); margin-bottom: 0.5rem; }
-      .cronograma p { margin: 0.25rem 0 0; color: var(--gris); }
-      .dur { display: inline-block; background: var(--magenta); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 2px 8px; margin-right: 0.5rem; }
-      .extra:empty { display: none; }
-      .total { font-family: var(--titulo); font-weight: 800; font-size: clamp(2rem, 7vw, 3rem); margin: 1rem 0; }
-      .inversion ul { color: var(--gris); padding-left: 1.25rem; }
-      .cierre { background: var(--magenta); color: #fff; padding: 3rem 0; }
-      .cierre h2 { color: #fff; }
-      .cierre h2::after { border-color: #fff; }
-      .cierre a { color: #fff; }
-      .cta { display: inline-block; margin-top: 1rem; background: #fff; color: var(--magenta) !important; font-weight: 700; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 2px; }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+      body { margin: 0; background: var(--surface); color: var(--body); font: 400 16px/1.8 var(--font-sans); overflow-x: clip; }
+      img { max-width: 100%; display: block; }
+      h1, h2, h3, h4 { color: var(--heading); margin: 0; }
+      h2 { font: 700 clamp(26px, 4vw, 37px)/1.3 var(--font-sans); margin-bottom: 1.25rem; }
+      h3 { font: 700 21px/1.4 var(--font-sans); }
+      a { color: inherit; }
+      :focus-visible { outline: 3px solid var(--heading); outline-offset: 2px; }
+      .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+      @media (min-width: 768px) { .wrap { padding: 0 32px; } }
+      .estrecho { max-width: 860px; }
+      .centro { text-align: center; }
+      .texto { margin: 0 0 1rem; }
+      @media (min-width: 768px) { .texto { text-align: justify; hyphens: auto; } }
+      .estrecho-izq { max-width: 760px; }
+
+      /* Antetítulo con la raya roja de la referencia */
+      .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 0.75rem; color: var(--primary); font: 700 14px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; }
+      .eyebrow::before { content: ''; width: 40px; height: 2px; background: currentColor; flex: none; }
+      .eyebrow--dark { color: #fff; }
+      .eyebrow--dark::before { background: var(--primary); }
+      .eyebrow--centro { justify-content: center; }
+      .eyebrow:has(.switch)::before { display: none; }
+
+      /* Motivo de marca: interruptor que se enciende al cargar */
+      .switch { width: 40px; height: 22px; border-radius: 9999px; background: rgba(255, 255, 255, 0.25); position: relative; flex: none; animation: sw-bg 0.5s 0.6s var(--ease) forwards; }
+      .switch span { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; animation: sw-knob 0.5s 0.6s var(--ease) forwards; }
+      @keyframes sw-bg { to { background: var(--primary); } }
+      @keyframes sw-knob { to { transform: translateX(18px); } }
+
+      /* Botón único del sistema: rojo plano, chevron después */
+      .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: var(--on-primary); border-radius: var(--r-sm); padding: 10px 35px; font: 700 16px/1 var(--font-sans); text-decoration: none; transition: background-color 0.15s ease; }
+      .btn:hover { background: var(--primary-hover); }
+      .btn:active { background: var(--primary-active); }
+      .btn svg { transition: transform 0.25s var(--ease); }
+      .btn:hover svg { transform: translateX(4px); }
+      .btn--slider { font-size: 18px; line-height: 1.5; letter-spacing: 1px; border-radius: var(--r-xs); padding: 12px 22px; }
+      .btn--sm { padding: 10px 18px; font-size: 14px; }
+
+      /* Animaciones de entrada (adaptación de fadeInUp/Left/Right/Down) */
+      .js [data-reveal] { opacity: 0; transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); transition-delay: var(--d, 0ms); }
+      .js [data-reveal='up'] { transform: translateY(32px); }
+      .js [data-reveal='down'] { transform: translateY(-24px); }
+      .js [data-reveal='left'] { transform: translateX(-40px); }
+      .js [data-reveal='right'] { transform: translateX(40px); }
+      .js [data-reveal].visible { opacity: 1; transform: none; }
+
+      /* Barra de progreso de lectura */
+      .progreso { position: fixed; inset: 0 0 auto; height: 3px; z-index: 60; pointer-events: none; }
+      .progreso span { display: block; height: 100%; background: var(--primary); transform-origin: left; transform: scaleX(0); }
+
+      /* Menú */
+      .nav { position: fixed; inset: 0 0 auto; z-index: 50; height: var(--nav-h); transition: background-color 0.3s ease; }
+      .nav__in { height: 100%; max-width: 1180px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+      @media (min-width: 768px) { .nav__in { padding: 0 32px; } }
+      .nav__logo img { width: 120px; height: auto; }
+      .nav__links { display: flex; align-items: center; gap: 26px; font: 700 14px/1 var(--font-sans); color: #fff; }
+      .nav__links a:not(.btn) { text-decoration: none; }
+      .nav__links a:not(.btn):hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--primary); }
+      .nav--solida { background: var(--surface); }
+      .nav--solida .nav__links { color: var(--heading); }
+      .nav__toggle { display: none; background: none; border: 0; color: #fff; padding: 8px; cursor: pointer; }
+      .nav--solida .nav__toggle { color: var(--heading); }
+      @media (max-width: 1024px) {
+        .nav__toggle { display: inline-flex; }
+        .nav__links { display: none; position: absolute; top: var(--nav-h); left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--surface); color: var(--heading); padding: 8px 0 16px; }
+        .nav__links a:not(.btn) { padding: 14px 16px; }
+        .nav__cta { margin: 8px 16px 0; justify-content: center; }
+        .nav--abierta { background: var(--surface); }
+        .nav--abierta .nav__links { display: flex; }
+        .nav--abierta .nav__toggle { color: var(--heading); }
+      }
+
+      /* Hero */
+      .hero { background: var(--oscuro); color: #fff; padding: calc(var(--nav-h) + 56px) 0 140px; position: relative; overflow: hidden; }
+      .hero__grid { display: grid; gap: 56px; align-items: center; }
+      @media (min-width: 900px) { .hero__grid { grid-template-columns: 1.05fr 1fr; } }
+      .hero__titulo { font: 400 clamp(38px, 6.4vw, 72px)/1.04 var(--font-display); color: #fff; text-transform: uppercase; margin: 0.5rem 0 1.25rem; }
+      .hero__bajada { font-size: 18px; color: #e6e6e6; max-width: 46ch; margin: 0 0 0.75rem; }
+      .hero__meta { font-size: 14px; color: #bdbdbd; margin: 0 0 2rem; }
+      .hero__media { position: relative; }
+      .hero__logo { position: absolute; z-index: 2; left: -16px; bottom: -28px; width: 120px; aspect-ratio: 1; background: #fff; padding: 12px; display: grid; place-items: center; border-radius: var(--r-sm); }
+      @media (max-width: 899px) { .hero__logo { left: 12px; width: 96px; } }
+
+      /* Foto rectangular con bloque rojo desplazado (versión plana del blob de la referencia) */
+      .foto { position: relative; }
+      .foto img { position: relative; z-index: 1; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--placeholder); }
+      .foto--acento::before { content: ''; position: absolute; inset: 24px -24px -24px 24px; background: var(--primary); transition: transform 0.6s var(--ease); }
+      .foto--izq::before { inset: 24px 24px -24px -24px; }
+      .foto--recorte img { object-fit: contain; background: var(--surface-alt); }
+      @media (hover: hover) { .foto--acento:hover::before { transform: translate(-8px, -8px); } .foto--izq:hover::before { transform: translate(8px, -8px); } }
+      @media (max-width: 600px) { .foto--acento::before { inset: 14px -10px -14px 14px; } .foto--izq::before { inset: 14px 14px -14px -10px; } }
+
+      /* Tarjetas con relleno rojo desde abajo al hover (hover-from-bottom) */
+      .tarjeta { position: relative; display: block; background: var(--surface); padding: 32px 28px; border-radius: var(--r-sm); text-decoration: none; overflow: hidden; isolation: isolate; outline: 1px solid #ececec; outline-offset: -1px; }
+      .tarjeta--fill::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--primary); transform: scaleY(0); transform-origin: bottom; transition: transform 0.45s var(--ease); }
+      .tarjeta--fill:hover::before, .tarjeta--fill:focus-visible::before { transform: scaleY(1); }
+      .tarjeta--fill:hover, .tarjeta--fill:hover h3, .tarjeta--fill:hover .tarjeta__icono, .tarjeta--fill:hover .tarjeta__num, .tarjeta--fill:hover .tarjeta__mas,
+      .tarjeta--fill:focus-visible, .tarjeta--fill:focus-visible h3 { color: #fff; }
+      .tarjeta, .tarjeta h3, .tarjeta__icono, .tarjeta__num, .tarjeta__mas { transition: color 0.3s ease; }
+      .tarjeta p { margin: 0.25rem 0 0; }
+      .tarjeta__num { font: 400 32px/1 var(--font-display); color: var(--primary); display: block; margin-bottom: 18px; }
+      .tarjeta__mas { display: inline-flex; align-items: center; gap: 4px; margin-top: 18px; font: 700 13px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; color: var(--primary); }
+      .tarjeta__icono { color: var(--primary); display: block; margin-bottom: 18px; }
+
+      .resumen { position: relative; z-index: 2; margin-top: -84px; display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+      /* Secciones */
+      .seccion { padding: clamp(64px, 9vw, 112px) 0; }
+      .seccion--alt { background: var(--surface-alt); }
+      .dos-col { display: grid; gap: clamp(48px, 6vw, 80px); align-items: center; }
+      @media (min-width: 900px) { .dos-col { grid-template-columns: 1fr 1fr; } }
+      .cabecera { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 2rem; }
+      .cabecera__lado { max-width: 360px; margin: 0 0 1.25rem; text-align: left; }
+      .grid-3 { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+      .lista-simple { list-style: none; padding: 0; margin: 0.75rem 0 0; }
+      .lista-simple li { padding: 4px 0; }
+
+      /* Nosotros */
+      .nosotros__media { position: relative; }
+      .sello { position: absolute; right: -12px; bottom: -36px; z-index: 2; background: var(--primary); color: #fff; padding: 18px 24px; border-radius: var(--r-sm); display: flex; flex-wrap: wrap; align-items: flex-start; max-width: 190px; }
+      .sello strong { font: 400 48px/1 var(--font-display); }
+      .sello > span { font: 400 28px/1 var(--font-display); }
+      .sello small { flex-basis: 100%; font: 700 13px/1.3 var(--font-sans); margin-top: 6px; }
+      @media (max-width: 600px) { .sello { right: 8px; } }
+      .cita { margin: 1.5rem 0 0; background: var(--surface-alt); padding: 20px 24px 20px 28px; position: relative; color: var(--heading); font-weight: 700; font-style: italic; }
+      .cita::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary); }
+
+      /* Cifras */
+      .cifras { background: var(--oscuro); color: #fff; padding: 56px 0; }
+      .cifras__grid { display: grid; gap: 32px 20px; grid-template-columns: repeat(2, 1fr); text-align: center; }
+      @media (min-width: 768px) { .cifras__grid { grid-template-columns: repeat(4, 1fr); } }
+      .cifra p { margin: 0; }
+      .cifra__num { font: 400 clamp(40px, 5vw, 56px)/1 var(--font-display); }
+      .cifra__num em { font-style: normal; color: var(--primary); margin-left: 2px; }
+      .cifra__label { font-size: 14px; color: #d0d0d0; margin-top: 8px !important; }
+
+      /* Clientes: marquesina continua */
+      .clientes { padding: 56px 0 64px; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
+      .marquesina { overflow: hidden; margin-top: 24px; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+      .marquesina__pista { display: flex; gap: 56px; width: max-content; animation: marquesina 60s linear infinite; }
+      .marquesina:hover .marquesina__pista { animation-play-state: paused; }
+      .marquesina img { height: 56px; width: auto; max-width: 150px; object-fit: contain; }
+      @keyframes marquesina { to { transform: translateX(calc(-50% - 28px)); } }
+      @media (prefers-reduced-motion: reduce) {
+        .marquesina { mask-image: none; }
+        .marquesina__pista { animation: none; flex-wrap: wrap; justify-content: center; width: auto; padding: 0 16px; gap: 32px; }
+        .marquesina__pista img[aria-hidden] { display: none; }
+      }
+
+      /* Método */
+      .metodo { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 40px 28px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); counter-reset: m; }
+      .metodo li { position: relative; padding-top: 8px; }
+      .metodo__icono { color: var(--primary); display: block; margin-bottom: 16px; transition: transform 0.4s var(--ease); }
+      .metodo li:hover .metodo__icono { transform: translateY(-6px); }
+      .metodo__num { position: absolute; top: 0; right: 0; font: 400 44px/1 var(--font-display); color: #ececec; }
+      .metodo p { margin: 0.5rem 0 0; }
+
+      /* Banda con foto (requerimiento y cierre) */
+      .banda { position: relative; padding: clamp(80px, 12vw, 140px) 0; background: var(--oscuro) var(--foto, none) center / cover no-repeat; color: #fff; }
+      .banda::before { content: ''; position: absolute; inset: 0; background: var(--overlay); }
+      .banda > .wrap { position: relative; }
+      .banda__texto { font: 700 clamp(22px, 3vw, 32px)/1.45 var(--font-sans); margin: 0; color: #fff; }
+      .banda__bajada { color: #e6e6e6; font-size: 18px; margin: 0 0 2rem; }
+      .display { font: 400 clamp(40px, 7vw, 72px)/1.1 var(--font-display); color: #fff; text-transform: uppercase; }
+      .cierre__ctas { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 32px; }
+      .enlace-claro { display: inline-flex; align-items: center; gap: 8px; color: #fff; font-weight: 700; text-decoration: none; }
+      .enlace-claro:hover { text-decoration: underline; text-underline-offset: 6px; }
+
+      /* Módulos de servicio */
+      .modulo { padding: clamp(48px, 7vw, 88px) 0; }
+      .modulo + .modulo { border-top: 1px solid #f0f0f0; }
+      @media (min-width: 900px) { .modulo--inv .modulo__media { order: 2; } }
+      .modulo__num { font: 400 64px/1 var(--font-display); color: var(--primary); margin: 0 0 8px; }
+      .modulo__titulo { font: 700 clamp(28px, 4vw, 40px)/1.2 var(--font-sans); }
+      .modulo__sub { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; color: var(--heading); margin: 6px 0 24px; }
+      .bloque { background: var(--surface-alt); padding: 20px 24px; border-radius: var(--r-sm); margin-top: 16px; }
+      .bloque h4 { font: 700 15px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 6px; }
+      .bloque p { margin: 0; }
+      .bloque--rojo { background: var(--primary); color: #fff; }
+      .bloque--rojo h4 { color: #fff; }
+      .sub { font: 700 21px/1.4 var(--font-sans); margin: 0 0 1rem; display: flex; align-items: center; gap: 12px; }
+      .sub::before { content: ''; width: 24px; height: 2px; background: var(--primary); }
+      .incluye, .extra { margin-top: clamp(40px, 5vw, 64px); }
+      .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px 40px; }
+      @media (min-width: 768px) { .checks:not(.checks--una) { grid-template-columns: 1fr 1fr; } }
+      .checks li { display: flex; gap: 12px; align-items: flex-start; color: var(--heading); }
+      .checks svg { flex: none; color: var(--primary); margin-top: 4px; }
+      .pasos { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .pasos li { background: var(--surface-alt); padding: 24px; border-radius: var(--r-sm); color: var(--heading); font-weight: 700; position: relative; }
+      .pasos span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--r-sm); background: var(--primary); color: #fff; font-family: var(--font-display); margin-bottom: 14px; }
+      .casos { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin-top: 1.5rem; }
+      .casos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--r-sm); }
+
+      /* Kick off */
+      .kickoff { background: var(--primary); color: #fff; }
+      .kickoff h2 { color: #fff; }
+      .kickoff .eyebrow--dark::before { background: #fff; }
+      .kickoff__pasos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1px; background: rgba(255, 255, 255, 0.35); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      .kickoff__pasos li { background: var(--primary); padding: 28px 24px; transition: background-color 0.3s ease; }
+      .kickoff__pasos li:hover { background: var(--primary-hover); }
+      .kickoff__num { display: block; font: 400 36px/1 var(--font-display); color: rgba(255, 255, 255, 0.55); margin-bottom: 14px; }
+      .kickoff__pasos strong { display: block; font-size: 18px; line-height: 1.35; }
+      .kickoff__pasos p { margin: 6px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 15px; line-height: 1.6; }
+
+      /* Inversión: tarjetas de precio */
+      .precios { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: stretch; }
+      .precio { background: var(--surface); padding: 32px 28px; border-radius: var(--r-sm); display: flex; flex-direction: column; transition: transform 0.4s var(--ease); }
+      .precio__servicio { margin: 0 0 6px; font: 700 13px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; color: var(--primary); }
+      .precio h3 { font-size: 19px; }
+      .precio__monto { margin: 20px 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; color: var(--heading); }
+      .precio__monto span { font: 400 clamp(32px, 3.2vw, 40px)/1 var(--font-display); color: var(--primary); }
+      .precio__monto small { font-weight: 700; font-size: 15px; }
+      .precio ul { list-style: none; padding: 20px 0 0; margin: auto 0 0; border-top: 1px solid #eee; }
+      .precio li { display: flex; gap: 10px; align-items: flex-start; padding: 5px 0; font-size: 15px; line-height: 1.5; }
+      .precio li svg { flex: none; color: var(--primary); margin-top: 2px; }
+      .precio--destacado { background: var(--primary); color: #fff; }
+      .precio--destacado h3, .precio--destacado .precio__servicio, .precio--destacado .precio__monto, .precio--destacado .precio__monto span, .precio--destacado li svg { color: #fff; }
+      .precio--destacado ul { border-color: rgba(255, 255, 255, 0.35); }
+      @media (min-width: 1025px) { .precio--destacado { transform: translateY(-12px); } }
+      .notas { margin: 2.5rem 0 0; padding-left: 1.25rem; font-size: 14px; line-height: 1.7; max-width: 900px; }
+      .notas li + li { margin-top: 6px; }
+
+      /* Pie */
+      .pie { background: var(--oscuro); color: #d0d0d0; padding: 64px 0 24px; font-size: 14.4px; }
+      .pie__grid { display: grid; gap: 40px; }
+      @media (min-width: 768px) { .pie__grid { grid-template-columns: 1.3fr 1fr 1fr; } }
+      .pie__logo { width: 150px; height: auto; margin-bottom: 16px; }
+      .pie p { margin: 0 0 8px; }
+      .pie__titulo { font: 700 16px/1.4 var(--font-sans); color: #fff; margin-bottom: 14px !important; }
+      .pie__dato { display: flex; gap: 10px; align-items: flex-start; }
+      .pie__dato svg { flex: none; color: var(--primary); margin-top: 4px; }
+      .pie a { color: #fff; text-decoration: none; }
+      .pie a:hover { text-decoration: underline; text-underline-offset: 4px; }
+      .pie__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.12); font-size: 13px; color: #9e9e9e; }
+
+      /* Botón flotante de WhatsApp */
+      .fab { position: fixed; right: 20px; bottom: 20px; z-index: 40; width: 56px; height: 56px; border-radius: 9999px; background: var(--primary); color: #fff; display: grid; place-items: center; transition: background-color 0.15s ease; }
+      .fab:hover { background: var(--primary-hover); }
     </style>
   </body>
 </html>
