@@ -79,11 +79,6 @@ const nav = [
             <p class="hero__meta" data-reveal="up" style="--d:320ms">
               {fmt.format(data.fecha)} · Válida hasta el {fmt.format(vence)}
             </p>
-            <div class="hero__ctas" data-reveal="up" style="--d:400ms">
-              <a class="btn btn--slider" href={data.modulos.length ? '#propuesta' : '#situacion'}>
-                Ver la propuesta <Icon name="chevron-right" size={20} />
-              </a>
-            </div>
           </div>
           {data.imagenHero && (
             <div class="hero__media" data-reveal="right" style="--d:200ms">
@@ -561,7 +556,7 @@ const nav = [
       @media (min-width: 900px) { .hero__grid { grid-template-columns: 1.05fr 1fr; } }
       .hero__titulo { font: 400 clamp(38px, 6.4vw, 72px)/1.04 var(--font-display); color: #fff; text-transform: uppercase; margin: 0.5rem 0 1.25rem; }
       .hero__bajada { font-size: 18px; color: #e6e6e6; max-width: 46ch; margin: 0 0 0.75rem; }
-      .hero__meta { font-size: 14px; color: #bdbdbd; margin: 0 0 2rem; }
+      .hero__meta { font-size: 14px; color: #bdbdbd; margin: 0; }
       .hero__media { position: relative; }
       .hero__logo { position: absolute; z-index: 2; left: -16px; bottom: -28px; width: 120px; aspect-ratio: 1; background: #fff; padding: 12px; display: grid; place-items: center; border-radius: var(--r-sm); }
       @media (max-width: 899px) { .hero__logo { left: 12px; width: 96px; } }
