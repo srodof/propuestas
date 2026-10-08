@@ -17,7 +17,7 @@ export const agencia = {
   // Tres diferenciales que se muestran justo debajo del hero
   diferenciales: [
     {
-      icono: 'users',
+      icono: 'trending-up',
       titulo: 'Agencia boutique enfocada en resultados',
       texto: 'Trato cercano y socios directores con más de 15 años de experiencia involucrados en cada definición, con la mirada puesta en los resultados de tu negocio.',
     },
@@ -27,9 +27,9 @@ export const agencia = {
       texto: 'No vendemos paquetes genéricos: diseñamos cada solución para el desafío específico de tu empresa y te acompañamos en la ejecución.',
     },
     {
-      icono: 'bar-chart',
-      titulo: 'Resultados medibles',
-      texto: 'Lo que no se mide no se puede mejorar. Medimos KPIs y el retorno de tu inversión, y te reportamos cada mes.',
+      icono: 'users',
+      titulo: 'Un solo equipo para todo',
+      texto: 'Estrategia, creatividad, comunicación y tecnología bajo un mismo techo. Un equipo multidisciplinario coordina tu proyecto de principio a fin.',
     },
   ],
 
