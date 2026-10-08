@@ -28,8 +28,8 @@ export const agencia = {
     },
     {
       icono: 'users',
-      titulo: 'Un solo equipo para todo',
-      texto: 'Estrategia, creatividad, comunicación y tecnología bajo un mismo techo. Un equipo multidisciplinario coordina tu proyecto de principio a fin.',
+      titulo: 'Equipo multidisciplinario',
+      texto: 'Especialistas en marketing, comunicación, branding y transformación digital, liderados por directores con una trayectoria avalada por más de 15 años de experiencia.',
     },
   ],
 
