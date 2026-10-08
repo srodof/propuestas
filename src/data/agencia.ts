@@ -29,7 +29,7 @@ export const agencia = {
     {
       icono: 'users',
       titulo: 'Equipo multidisciplinario',
-      texto: 'Especialistas en marketing, comunicación, branding y transformación digital, liderados por directores con una trayectoria avalada por más de 15 años de experiencia.',
+      texto: 'Expertos en cada área de la empresa para entregarte los mejores resultados.',
     },
   ],
 
