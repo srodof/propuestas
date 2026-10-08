@@ -18,8 +18,8 @@ export const agencia = {
   diferenciales: [
     {
       icono: 'users',
-      titulo: 'Socios directores en tu cuenta',
-      texto: 'Nuestros directores, con más de 15 años de experiencia en marcas locales e internacionales, participan en cada definición de tu proyecto.',
+      titulo: 'Agencia boutique enfocada en resultados',
+      texto: 'Trato cercano y socios directores con más de 15 años de experiencia involucrados en cada definición, con la mirada puesta en los resultados de tu negocio.',
     },
     {
       icono: 'target',
