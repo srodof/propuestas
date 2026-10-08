@@ -1,0 +1,15 @@
+<!-- @dsCard group="Reports" height=70 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>html,body{margin:0}body{padding:16px;background:var(--surface);color:var(--heading);font-family:var(--font-sans)}.row{display:flex;flex-wrap:wrap;gap:20px;align-items:center}.cap{font:400 12px/1.4 var(--font-sans);color:var(--heading);margin:0 0 6px}</style></head>
+<body><div id="root"></div>
+<script>
+var S = window.Swiitch, h = React.createElement;
+var U = {"favicon": "/_blob/168f16e538c06f571e0a30a76854c799", "credencial": "/_blob/32e007e2e39bdcc6adec39ce7f6a47e8", "cuadrado_blanco": "/_blob/c2caa6e4db1e036d0a819ec2cb9f818d", "cuadrado_rojo": "/_blob/790089b47adc47fc0cd8a2508962702b", "footer": "/_blob/55643c3e87dcbabbf9b53bee8d03fe30", "h_blanco": "/_blob/94238abf9983dd8ead691928b789c511", "h_rojo": "/_blob/a86578e856edaa6e4e455287f5b543e8", "mobile": "/_blob/5e0498972ab04dc58cc2c765163fbf71", "transparente": "/_blob/69e30c8762471cf163a4f3154d0fc933", "pin": "/_blob/8c47ddbabbb2a80f411f211680d4734b", "impuestos": "/_blob/ac66d5bb121048ae49037f0f48d95c7e", "legal": "/_blob/e3ca74db04c38f2e15e3d9d45a6be794", "place": "/_blob/4363f1827ad6216c9b72b71892ec76bf"};
+
+function App(){ return h('div',{className:'row',style:{gap:28}},
+  h(S.Delta,{value:'30%',direction:'up',tone:'good',label:'vs agosto'}),
+  h(S.Delta,{value:'3%',direction:'down',tone:'good',label:'costo vs agosto'}),
+  h(S.Delta,{value:'8%',direction:'down',tone:'bad',label:'vs agosto'}),
+  h(S.Delta,{value:'sin cambio',direction:'flat',tone:'neutral'})); }
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>

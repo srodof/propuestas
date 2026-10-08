@@ -1,0 +1,152 @@
+{
+ "v": 3,
+ "assetGroups": {
+  "Logos": {
+   "name": "Logos",
+   "tile": "l",
+   "order": [
+    "swiitch-horizontal-rojo.png",
+    "swiitch-wordmark-rojo.png",
+    "swiitch-horizontal-blanco.png",
+    "swiitch-footer-rojo.png",
+    "swiitch-mobile-rojo.png",
+    "swiitch-rojo-transparente.png",
+    "swiitch-cuadrado-rojo.png",
+    "swiitch-cuadrado-blanco-sobre-rojo.png",
+    "swiitch-credencial-blanco.png",
+    "favicon-swiitch.png"
+   ],
+   "files": {
+    "swiitch-horizontal-rojo.png": {
+     "name": "swiitch-horizontal-rojo.png",
+     "blob": "a86578e856edaa6e4e455287f5b543e8",
+     "size": 9901,
+     "type": "image/png"
+    },
+    "swiitch-horizontal-blanco.png": {
+     "name": "swiitch-horizontal-blanco.png",
+     "blob": "94238abf9983dd8ead691928b789c511",
+     "size": 2206,
+     "type": "image/png"
+    },
+    "swiitch-footer-rojo.png": {
+     "name": "swiitch-footer-rojo.png",
+     "blob": "55643c3e87dcbabbf9b53bee8d03fe30",
+     "size": 11809,
+     "type": "image/png"
+    },
+    "swiitch-mobile-rojo.png": {
+     "name": "swiitch-mobile-rojo.png",
+     "blob": "5e0498972ab04dc58cc2c765163fbf71",
+     "size": 4238,
+     "type": "image/png"
+    },
+    "swiitch-rojo-transparente.png": {
+     "name": "swiitch-rojo-transparente.png",
+     "blob": "69e30c8762471cf163a4f3154d0fc933",
+     "size": 16659,
+     "type": "image/png"
+    },
+    "swiitch-cuadrado-rojo.png": {
+     "name": "swiitch-cuadrado-rojo.png",
+     "blob": "790089b47adc47fc0cd8a2508962702b",
+     "size": 16779,
+     "type": "image/png"
+    },
+    "swiitch-cuadrado-blanco-sobre-rojo.png": {
+     "name": "swiitch-cuadrado-blanco-sobre-rojo.png",
+     "blob": "c2caa6e4db1e036d0a819ec2cb9f818d",
+     "size": 16937,
+     "type": "image/png"
+    },
+    "swiitch-credencial-blanco.png": {
+     "name": "swiitch-credencial-blanco.png",
+     "blob": "32e007e2e39bdcc6adec39ce7f6a47e8",
+     "size": 15152,
+     "type": "image/png"
+    },
+    "favicon-swiitch.png": {
+     "name": "favicon-swiitch.png",
+     "blob": "168f16e538c06f571e0a30a76854c799",
+     "size": 8661,
+     "type": "image/png"
+    },
+    "swiitch-wordmark-rojo.png": {
+     "name": "swiitch-wordmark-rojo.png",
+     "blob": "a93e60dddb53596f191c06475d274271",
+     "size": 5293,
+     "type": "image/png"
+    }
+   }
+  },
+  "Submarcas": {
+   "name": "Submarcas",
+   "tile": "l",
+   "order": [
+    "swiitch-place.png",
+    "icon-pin-place.png",
+    "swiitch-legal.jpg",
+    "swiitch-impuestos.jpg"
+   ],
+   "files": {
+    "swiitch-place.png": {
+     "name": "swiitch-place.png",
+     "blob": "4363f1827ad6216c9b72b71892ec76bf",
+     "size": 2320,
+     "type": "image/png"
+    },
+    "icon-pin-place.png": {
+     "name": "icon-pin-place.png",
+     "blob": "8c47ddbabbb2a80f411f211680d4734b",
+     "size": 2209,
+     "type": "image/png"
+    },
+    "swiitch-legal.jpg": {
+     "name": "swiitch-legal.jpg",
+     "blob": "e3ca74db04c38f2e15e3d9d45a6be794",
+     "size": 4257,
+     "type": "image/jpeg"
+    },
+    "swiitch-impuestos.jpg": {
+     "name": "swiitch-impuestos.jpg",
+     "blob": "ac66d5bb121048ae49037f0f48d95c7e",
+     "size": 23006,
+     "type": "image/jpeg"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "createdOnFiles": {
+  "at": "2026-10-02T17:11:25Z",
+  "v": 1
+ },
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "groups": [
+  "Logos",
+  "Submarcas"
+ ],
+ "lastChange": {
+  "by": "SWIITCH",
+  "at": "2026-10-02T19:59:39Z",
+  "via": "Claude (Cowork)",
+  "note": "Añadido el patrón de reportes mensuales: tokens, estilos, guía y 9 componentes"
+ },
+ "layout": "files",
+ "libraries": [
+  {
+   "name": "react",
+   "version": "18"
+  },
+  {
+   "name": "react-dom",
+   "version": "18"
+  }
+ ],
+ "namespace": "Swiitch",
+ "sections": {},
+ "title": "SWIITCH"
+}

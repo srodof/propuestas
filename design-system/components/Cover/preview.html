@@ -1,0 +1,30 @@
+<!-- @dsCard height=300 -->
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<style>
+html,body{margin:0}
+body{background:var(--surface);}
+.cover{position:relative;width:960px;height:300px;overflow:hidden;background:var(--surface)}
+.cover svg{position:absolute;left:0;top:0}
+.red{fill:var(--primary)} .dark{fill:var(--surface-footer)}
+.slab{rx:var(--radius-sm)}
+.ring{fill:none;stroke:var(--surface);stroke-width:6} .knob{fill:var(--surface)}
+.ring-p{fill:none;stroke:var(--primary);stroke-width:6} .knob-p{fill:var(--primary)}
+.txt{position:absolute;left:32px;bottom:28px;width:440px}
+.name{margin:0;font:400 92px/.95 var(--font-display);color:var(--ink);white-space:nowrap}
+.tag{margin:12px 0 0;font:400 14px/1.4 var(--font-sans);color:var(--heading)}
+</style></head>
+<body><div class="cover">
+<svg width="960" height="300" viewBox="0 0 960 300" aria-hidden="true">
+<!-- Derivación:
+ bloques: primary 320x300 (x480-800), surface-footer 160x170 (x800-960, y0-170); ground = surface.
+ disposición: losa roja alta a la izquierda del campo, bloque oscuro apilado arriba a la derecha, píldora suelta debajo.
+ patrón: píldoras de radius-full con perilla (el favicon de SWIITCH es un interruptor y el nombre juega con "switch"): 6 en la losa, 1 en el bloque oscuro, 1 sólida sobre el fondo.
+ pasos/radios: gap-sm 20 entre píldoras, radius-sm en bloques, radius-full (mitad del lado corto) en píldoras. -->
+<rect x="480" y="0" width="320" height="300" class="red slab"/>
+<rect x="800" y="0" width="160" height="170" class="dark slab"/>
+<rect x="513" y="43" width="114" height="54" rx="27" class="ring"/><circle cx="540" cy="70" r="21" class="knob"/><rect x="653" y="43" width="114" height="54" rx="27" class="ring"/><circle cx="740" cy="70" r="21" class="knob"/><rect x="513" y="123" width="114" height="54" rx="27" class="ring"/><circle cx="600" cy="150" r="21" class="knob"/><rect x="653" y="123" width="114" height="54" rx="27" class="ring"/><circle cx="680" cy="150" r="21" class="knob"/><rect x="513" y="203" width="114" height="54" rx="27" class="ring"/><circle cx="540" cy="230" r="21" class="knob"/><rect x="653" y="203" width="114" height="54" rx="27" class="ring"/><circle cx="740" cy="230" r="21" class="knob"/>
+<rect x="823" y="43" width="114" height="54" rx="27" class="ring-p"/><circle cx="910" cy="70" r="21" class="knob-p"/>
+<rect x="820" y="220" width="120" height="60" rx="30" class="red"/><circle cx="850" cy="250" r="21" class="knob"/>
+</svg>
+<div class="txt"><h1 class="name">SWIITCH</h1><p class="tag">Marketing y comunicación con resultados reales</p></div>
+</div></body></html>
