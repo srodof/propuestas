@@ -87,6 +87,13 @@ export const agencia = {
     },
   ],
 
+  // Notas de inversión que se usan si la propuesta no escribe las suyas
+  notasInversion: [
+    'Los montos se estimaron según las horas de trabajo de los integrantes del equipo. El perfil de nuestra agencia establece una dedicación relevante de los socios directores, que aportan su experiencia en las definiciones.',
+    'El fee de agencia no incluye la inversión publicitaria. Todos los gastos en medios pagados serán aprobados y financiados directamente por el cliente.',
+    'Cualquier producción audiovisual necesaria (videos, fotografía profesional, modelos e influencers, alquiler de espacios y escenografías) no está incluida en el fee de agencia y requerirá un presupuesto y aprobación por separado.',
+  ],
+
   contacto: {
     direccion: ['Av. San Martín, Calle J', 'Edificio Manzana 40, Torre 2, Piso 9', 'Santa Cruz de la Sierra, Bolivia'],
     telefono: '(591) 779 44824',

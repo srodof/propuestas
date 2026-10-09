@@ -21,6 +21,9 @@ const slug = (s: string) =>
 const { contacto } = agencia;
 const mensaje = encodeURIComponent(`Hola SWIITCH, quiero avanzar con la propuesta "${data.titulo}" para ${data.cliente}.`);
 const whatsapp = `https://wa.me/${contacto.whatsapp}?text=${mensaje}`;
+// Texto con **negritas**: se escapa el HTML y solo se convierte el doble asterisco
+const negritas = (t: string) =>
+  t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 const logo = (id: string) => ({ src: `/clientes/${id}.webp`, alt: nombresClientes[id] ?? id });
 
 const nav = [
@@ -210,7 +213,8 @@ const nav = [
         <div class="wrap estrecho">
           <p class="eyebrow" data-reveal="left">Situación actual</p>
           <h2 data-reveal="up">Dónde está {data.cliente} hoy</h2>
-          {data.situacion.map((p) => <p class="texto" data-reveal="up">{p}</p>)}
+          {data.situacion.map((p) => <p class="texto" data-reveal="up" set:html={negritas(p)} />)}
+          {data.cita && <blockquote class="cita cita--grande" data-reveal="up" set:html={negritas(data.cita)} />}
         </div>
       </section>
 
@@ -229,7 +233,14 @@ const nav = [
             <p class="eyebrow" data-reveal="left">Nuestra propuesta</p>
             <h2 data-reveal="up">Lo que haremos juntos</h2>
           </div>
-          {data.modulos.map((m, i) => (
+          {data.modulos.map((m, i) => {
+            // Estrategia, enfoque y los bloques libres se muestran igual, alternando el rojo
+            const textos = [
+              m.estrategia && { titulo: 'Estrategia', texto: m.estrategia },
+              m.enfoque && { titulo: 'Enfoque', texto: m.enfoque },
+              ...(m.bloques ?? []),
+            ].filter(Boolean) as { titulo: string; texto: string }[];
+            return (
             <article class:list={['modulo', { 'modulo--inv': i % 2 === 1 }]} id={slug(m.titulo)}>
               <div class="wrap">
                 <div class="dos-col modulo__cabeza">
@@ -244,18 +255,13 @@ const nav = [
                     <p class="modulo__num" data-reveal="up">{dos(i)}</p>
                     <h3 class="modulo__titulo" data-reveal="up">{m.titulo}</h3>
                     {m.subtitulo && <p class="modulo__sub" data-reveal="up">{m.subtitulo}</p>}
-                    {m.estrategia && (
-                      <div class="bloque" data-reveal="up">
-                        <h4>Estrategia</h4>
-                        <p>{m.estrategia}</p>
+                    {m.plazo && <p class="modulo__plazo" data-reveal="up"><Icon name="clock" size={18} />{m.plazo}</p>}
+                    {textos.map((b, k) => (
+                      <div class:list={['bloque', { 'bloque--rojo': k % 2 === 1 }]} data-reveal="up">
+                        <h4>{b.titulo}</h4>
+                        <p>{b.texto}</p>
                       </div>
-                    )}
-                    {m.enfoque && (
-                      <div class="bloque bloque--rojo" data-reveal="up">
-                        <h4>Enfoque</h4>
-                        <p>{m.enfoque}</p>
-                      </div>
-                    )}
+                    ))}
                   </div>
                 </div>
 
@@ -265,6 +271,20 @@ const nav = [
                     <ul class="checks">
                       {m.incluye.map((it, k) => (
                         <li data-reveal="up" style={`--d:${(k % 6) * 70}ms`}><Icon name="check" size={20} />{it}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {m.alcance && m.alcance.length > 0 && (
+                  <div class="extra">
+                    <h4 class="sub" data-reveal="up">Alcance</h4>
+                    <ul class="alcance">
+                      {m.alcance.map((a, k) => (
+                        <li data-reveal="up" style={`--d:${(k % 6) * 70}ms`}>
+                          <strong>{a.titulo}</strong>
+                          {a.detalle && <p>{a.detalle}</p>}
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -294,6 +314,23 @@ const nav = [
                   </div>
                 )}
 
+                {m.comparativa && (
+                  <div class="extra">
+                    <h4 class="sub" data-reveal="up">{m.comparativa.titulo}</h4>
+                    {m.comparativa.texto && <p class="texto estrecho-izq" data-reveal="up">{m.comparativa.texto}</p>}
+                    <div class="tabla" data-reveal="up">
+                      <table>
+                        <thead><tr>{m.comparativa.columnas.map((c) => <th scope="col">{c}</th>)}</tr></thead>
+                        <tbody>
+                          {m.comparativa.filas.map((f) => (
+                            <tr>{f.map((c, k) => (k === 0 ? <th scope="row">{c}</th> : <td>{c}</td>))}</tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
                 {m.casos && (
                   <div class="extra">
                     <h4 class="sub" data-reveal="up">{m.casos.titulo}</h4>
@@ -307,7 +344,8 @@ const nav = [
                 )}
               </div>
             </article>
-          ))}
+            );
+          })}
         </section>
       )}
 
@@ -560,8 +598,9 @@ const nav = [
       .hero__bajada { font-size: 18px; color: #e6e6e6; max-width: 46ch; margin: 0 0 0.75rem; }
       .hero__meta { font-size: 14px; color: #bdbdbd; margin: 0; }
       .hero__media { position: relative; }
-      .hero__logo { position: absolute; z-index: 2; left: -16px; bottom: -28px; width: 120px; aspect-ratio: 1; background: #fff; padding: 12px; display: grid; place-items: center; border-radius: var(--r-sm); }
-      @media (max-width: 899px) { .hero__logo { left: 12px; width: 96px; } }
+      .hero__logo { position: absolute; z-index: 2; left: -16px; bottom: -28px; height: 120px; min-width: 120px; max-width: min(300px, 80%); background: #fff; padding: 12px 16px; display: grid; place-items: center; border-radius: var(--r-sm); box-sizing: border-box; }
+      .hero__logo img { max-height: 96px; max-width: 100%; width: auto; object-fit: contain; }
+      @media (max-width: 899px) { .hero__logo { left: 12px; height: 96px; min-width: 96px; } .hero__logo img { max-height: 72px; } }
 
       /* Foto rectangular con bloque rojo desplazado (versión plana del blob de la referencia) */
       .foto { position: relative; }
@@ -655,6 +694,20 @@ const nav = [
       .modulo__num { font: 400 64px/1 var(--font-display); color: var(--primary); margin: 0 0 8px; }
       .modulo__titulo { font: 700 clamp(28px, 4vw, 40px)/1.2 var(--font-sans); }
       .modulo__sub { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; color: var(--heading); margin: 6px 0 24px; }
+      .modulo__plazo { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 8px; padding: 6px 14px; border-radius: var(--r-xs); background: var(--oscuro); color: #fff; font: 700 13px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; }
+      .cita--grande { font-size: clamp(18px, 2.2vw, 22px); line-height: 1.6; font-style: normal; font-weight: 400; padding: 28px 32px 28px 36px; }
+      .cita--grande strong { color: var(--primary); }
+      .alcance { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 16px 40px; }
+      @media (min-width: 768px) { .alcance { grid-template-columns: 1fr 1fr; } }
+      .alcance li { border-left: 4px solid var(--primary); padding: 4px 0 4px 20px; }
+      .alcance strong { color: var(--heading); display: block; }
+      .alcance p { margin: 4px 0 0; }
+      .tabla { margin-top: 1.5rem; overflow-x: auto; }
+      .tabla table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 15px; line-height: 1.5; }
+      .tabla th, .tabla td { padding: 14px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid #ececec; }
+      .tabla thead th { background: var(--primary); color: #fff; font-weight: 700; }
+      .tabla tbody th { color: var(--heading); font-weight: 700; background: var(--surface-alt); }
+      .tabla td { color: var(--heading); }
       .bloque { background: var(--surface-alt); padding: 20px 24px; border-radius: var(--r-sm); margin-top: 16px; }
       .bloque h4 { font: 700 15px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 6px; }
       .bloque p { margin: 0; }
@@ -686,6 +739,7 @@ const nav = [
 
       /* Inversión: tarjetas de precio */
       .precios { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: stretch; }
+      .precio:only-child { max-width: 560px; }
       .precio { background: var(--surface); padding: 32px 28px; border-radius: var(--r-sm); display: flex; flex-direction: column; transition: transform 0.4s var(--ease); }
       .precio__servicio { margin: 0 0 6px; font: 700 13px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; color: var(--primary); }
       .precio h3 { font-size: 19px; }

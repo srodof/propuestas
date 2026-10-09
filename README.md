@@ -10,14 +10,20 @@ public/propuestas/MM-YY/cliente-xxxx/          →  sus imágenes (hero, logo, f
 Ejemplo: `src/content/propuestas/05-26/urubo-golf-s64q.md` → https://propuestas.swiitchad.com/05-26/urubo-golf-s64q/
 
 ## Crear una propuesta
+La forma más simple es completar `brief-propuesta.md` y enviárselo a Claude en el proyecto con las fotos y el logo.
+
+Para hacerlo a mano:
 1. `npm run nueva -- "Nombre del cliente"` crea el archivo y la carpeta de imágenes con el mes actual y un código nuevo.
    Para otro mes: `npm run nueva -- "Nombre del cliente" 06-26`.
+   Para arrancar con servicios ya cargados: `npm run nueva -- "Nombre del cliente" --servicios desarrollo-web,branding`.
 2. Llena los datos del encabezado. `MM-YY` debe coincidir con la `fecha`; si no, el build da error.
 3. Sube sus imágenes a la carpeta que te indicó el comando.
 
 El build también da error si el nombre del archivo no termina en un código de 4 caracteres.
 
-Lo común de SWIITCH (nosotros, diferenciales, servicios, clientes, método y contacto) está en `src/data/agencia.ts` y aparece en todas las propuestas.
+Lo común de SWIITCH (nosotros, diferenciales, servicios, clientes, método, contacto y notas de inversión) está en `src/data/agencia.ts` y aparece en todas las propuestas.
+
+El contenido por defecto de cada servicio (social media, branding, desarrollo web, eventos, producción audiovisual) está en `src/data/servicios.ts`. Un módulo con `servicio: desarrollo-web` lo trae completo y la propuesta solo escribe lo que cambia. Ejemplo de propuesta de un solo servicio: `src/content/propuestas/07-26/omoda-jaecoo-uxsd.md`.
 
 ## Ver y publicar
 - `npm install` (solo la primera vez)
