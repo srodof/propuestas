@@ -473,7 +473,7 @@ const nav = [
           const end = Number(el.dataset.count); const t0 = performance.now(); const dur = 1800;
           const tick = (t) => {
             const p = Math.min((t - t0) / dur, 1);
-            el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString(document.documentElement.lang);
+            el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString(document.documentElement.lang || undefined);
             if (p < 1) requestAnimationFrame(tick);
           };
           requestAnimationFrame(tick);
