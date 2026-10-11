@@ -1,13 +1,16 @@
 // Crea una propuesta nueva a partir de plantilla-propuesta.md.
-// Uso: npm run nueva -- "Nombre del cliente" [MM-YY]
+// Uso: npm run nueva -- "Nombre del cliente" [MM-YY] [--servicios desarrollo-web,branding]
 // Genera src/content/propuestas/MM-YY/nombre-del-cliente-xxxx.md y la
 // carpeta de imágenes public/propuestas/MM-YY/nombre-del-cliente-xxxx/.
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { randomInt } from 'node:crypto';
 
-const [cliente, mesArg] = process.argv.slice(2);
+const args = process.argv.slice(2);
+const iServicios = args.indexOf('--servicios');
+const pedidos = iServicios >= 0 ? (args.splice(iServicios, 2)[1] ?? '').split(',').filter(Boolean) : [];
+const [cliente, mesArg] = args;
 if (!cliente) {
-  console.error('Uso: npm run nueva -- "Nombre del cliente" [MM-YY]');
+  console.error('Uso: npm run nueva -- "Nombre del cliente" [MM-YY] [--servicios desarrollo-web,branding]');
   process.exit(1);
 }
 
@@ -35,9 +38,20 @@ if (existsSync(archivo)) {
   process.exit(1);
 }
 
-const plantilla = readFileSync('plantilla-propuesta.md', 'utf8')
+// Los ids válidos son las claves de src/data/servicios.ts
+const ids = [...readFileSync('src/data/servicios.ts', 'utf8').matchAll(/^  '?([a-z-]+)'?: \{$/gm)].map((m) => m[1]);
+const malos = pedidos.filter((p) => !ids.includes(p));
+if (malos.length > 0) {
+  console.error(`Servicio desconocido: ${malos.join(', ')}. Disponibles: ${ids.join(', ')}.`);
+  process.exit(1);
+}
+
+let plantilla = readFileSync('plantilla-propuesta.md', 'utf8')
   .replace(/^cliente: .*$/m, `cliente: ${cliente}`)
   .replace(/^fecha: .*$/m, `fecha: 20${yy}-${mm}-01`);
+if (pedidos.length > 0) {
+  plantilla = plantilla.replace(/^  - servicio: .*$/m, pedidos.map((p) => `  - servicio: ${p}`).join('\n'));
+}
 
 mkdirSync(`src/content/propuestas/${mes}`, { recursive: true });
 mkdirSync(`public/propuestas/${mes}/${slug}`, { recursive: true });
