@@ -1,6 +1,12 @@
 ---
 // Portada neutra: no lista las propuestas para que cada cliente
 // solo vea la suya mediante su enlace directo.
+import Icon from '../components/Icon.astro';
+import { agencia } from '../data/agencia';
+
+const { contacto } = agencia;
+const whatsapp = `https://wa.me/${contacto.whatsapp}?text=${encodeURIComponent('Hola SWIITCH, quiero consultar sobre mi propuesta.')}`;
+const anio = new Date().getFullYear();
 ---
 <!doctype html>
 <html lang="es">
@@ -9,16 +15,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Propuestas · SWIITCH</title>
+    <link rel="icon" type="image/png" href="/marca/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-    <style>
-      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #212121; color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; padding: 16px; }
-      h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #ff3050; margin: 0; }
-    </style>
+    <link rel="preload" href="/fonts/Heavitas.ttf" as="font" type="font/ttf" crossorigin />
   </head>
   <body>
-    <div>
-      <h1>SWIITCH</h1>
-      <p>Propuestas comerciales. Usa el enlace que te compartimos para ver la tuya.</p>
-    </div>
+    <header class="cabecera">
+      <div class="wrap cabecera__in">
+        <a href={contacto.web} aria-label="SWIITCH, ir a swiitchad.com">
+          <img src="/marca/swiitch-rojo.png" alt="SWIITCH" width="132" height="40" />
+        </a>
+        <a class="cabecera__link" href={contacto.web}>swiitchad.com</a>
+      </div>
+    </header>
+
+    <main class="hero">
+      <div class="wrap hero__grid">
+        <div class="hero__texto">
+          <p class="eyebrow entra">
+            <span class="switch" aria-hidden="true"><span></span></span>
+            Propuestas comerciales
+          </p>
+          <h1 class="hero__titulo entra" style="--d:120ms">Tu propuesta te espera</h1>
+          <p class="hero__bajada entra" style="--d:240ms">
+            Cada propuesta de SWIITCH se prepara a medida y se comparte con un enlace privado.
+            Usa el enlace que te enviamos para verla.
+          </p>
+          <p class="hero__nota entra" style="--d:300ms">¿No lo encuentras? Escríbenos y te lo reenviamos.</p>
+          <div class="hero__acciones entra" style="--d:360ms">
+            <a class="btn" href={whatsapp} target="_blank" rel="noopener">
+              Conversemos <Icon name="chevron-right" size={18} />
+            </a>
+            <a class="enlace" href={contacto.web}>Conócenos</a>
+          </div>
+        </div>
+        <div class="hero__media entra" style="--d:200ms">
+          <div class="foto">
+            <img src={agencia.nosotros.imagen} alt="Equipo de SWIITCH trabajando" width="800" height="600" fetchpriority="high" />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="pie">
+      <div class="wrap pie__in">
+        <img src="/marca/swiitch-footer-rojo.png" alt="SWIITCH" width="140" height="37" />
+        <ul class="pie__datos">
+          <li><Icon name="mail" size={18} /> <a href={`mailto:${contacto.email}`}>{contacto.email}</a></li>
+          <li><Icon name="phone" size={18} /> <a href={whatsapp} target="_blank" rel="noopener">{contacto.telefono}</a></li>
+          <li><Icon name="map-pin" size={18} /> {contacto.oficinas.join(' · ')}</li>
+        </ul>
+        <p class="pie__legal">© {anio} SWIITCH</p>
+      </div>
+    </footer>
+
+    <style is:global>
+      @font-face { font-family: 'Heavitas'; src: url('/fonts/Heavitas.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+      :root {
+        --primary: #ff3050; --primary-hover: #e62b48; --primary-active: #cc2640; --on-primary: #fff;
+        --heading: #333; --body: #797979; --surface: #fff; --surface-alt: #f8f8f8; --oscuro: #212121;
+        --placeholder: #d9d9d9;
+        --font-display: 'Heavitas', 'Montserrat', sans-serif; --font-sans: 'Montserrat', system-ui, sans-serif;
+        --r-sm: 5px;
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body { margin: 0; display: flex; flex-direction: column; background: var(--surface); color: var(--body); font: 400 16px/1.8 var(--font-sans); overflow-x: clip; }
+      img { max-width: 100%; display: block; }
+      a { color: inherit; }
+      :focus-visible { outline: 3px solid var(--heading); outline-offset: 2px; }
+      .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+      @media (min-width: 768px) { .wrap { padding: 0 32px; } }
+
+      .cabecera__in { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .cabecera img { width: 120px; height: auto; }
+      .cabecera__link { font: 700 14px/1 var(--font-sans); color: var(--heading); text-decoration: none; }
+      .cabecera__link:hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--primary); }
+
+      .hero { flex: 1; display: flex; align-items: center; padding: 40px 0 88px; }
+      .hero__grid { display: grid; gap: 56px; align-items: center; }
+      @media (min-width: 900px) { .hero__grid { grid-template-columns: 1.1fr 1fr; gap: 72px; } }
+
+      .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 0.75rem; color: var(--primary); font: 700 14px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; }
+      .switch { width: 40px; height: 22px; border-radius: 9999px; background: var(--placeholder); position: relative; flex: none; animation: sw-bg 0.5s 0.6s var(--ease) forwards; }
+      .switch span { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; animation: sw-knob 0.5s 0.6s var(--ease) forwards; }
+      @keyframes sw-bg { to { background: var(--primary); } }
+      @keyframes sw-knob { to { transform: translateX(18px); } }
+
+      .hero__titulo { font: 400 clamp(38px, 6.4vw, 72px)/1.04 var(--font-display); color: var(--heading); text-transform: uppercase; margin: 0.5rem 0 1.25rem; }
+      .hero__bajada { font-size: 18px; max-width: 46ch; margin: 0 0 0.5rem; }
+      .hero__nota { font-size: 15px; color: var(--heading); margin: 0 0 2rem; }
+      .hero__acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+
+      .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: var(--on-primary); border-radius: var(--r-sm); padding: 12px 35px; font: 700 16px/1 var(--font-sans); text-decoration: none; transition: background-color 0.15s ease; }
+      .btn:hover { background: var(--primary-hover); }
+      .btn:active { background: var(--primary-active); }
+      .btn svg { transition: transform 0.25s var(--ease); }
+      .btn:hover svg { transform: translateX(4px); }
+      .enlace { font: 700 16px/1 var(--font-sans); color: var(--heading); text-decoration: underline; text-decoration-color: var(--primary); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+      .enlace:hover { color: var(--primary-active); }
+
+      /* Foto rectangular con bloque rojo desplazado, como en las propuestas */
+      .foto { position: relative; margin: 0 24px 24px 0; }
+      .foto::before { content: ''; position: absolute; inset: 24px -24px -24px 24px; background: var(--primary); transition: transform 0.6s var(--ease); }
+      .foto img { position: relative; z-index: 1; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; background: var(--placeholder); }
+      @media (hover: hover) { .foto:hover::before { transform: translate(-8px, -8px); } }
+      @media (max-width: 600px) { .foto { margin: 0 10px 14px 0; } .foto::before { inset: 14px -10px -14px 14px; } }
+
+      .pie { background: var(--oscuro); color: #fff; padding: 32px 0; font-size: 14px; }
+      .pie__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px; }
+      .pie img { width: 120px; height: auto; }
+      .pie__datos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 28px; }
+      .pie__datos li { display: flex; align-items: center; gap: 8px; }
+      .pie__datos svg { color: var(--primary); flex: none; }
+      .pie__datos a { text-decoration: none; }
+      .pie__datos a:hover { text-decoration: underline; }
+      .pie__legal { margin: 0; color: #bdbdbd; }
+
+      /* Entrada sobria: opacidad y desplazamiento corto */
+      .entra { animation: entra 0.8s var(--ease) both; animation-delay: var(--d, 0ms); }
+      @keyframes entra { from { opacity: 0; transform: translateY(24px); } }
+      @media (prefers-reduced-motion: reduce) {
+        .entra, .switch, .switch span { animation: none; }
+        .switch { background: var(--primary); }
+        .switch span { transform: translateX(18px); }
+      }
+    </style>
   </body>
 </html>
