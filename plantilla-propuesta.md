@@ -5,6 +5,7 @@
 # (xxxx es un código al azar) y crea la carpeta de imágenes
 # public/propuestas/MM-YY/nombre-del-cliente-xxxx/.
 # Los bloques opcionales que no uses no se muestran.
+# idioma: en   (para una propuesta en inglés; por defecto es español)
 cliente: Cliente de Ejemplo
 titulo: Estrategia de marketing digital
 bajada: Una frase corta que resuma lo que proponemos.

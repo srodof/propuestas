@@ -25,6 +25,9 @@ Lo común de SWIITCH (nosotros, diferenciales, servicios, clientes, método, con
 
 El contenido por defecto de cada servicio (social media, branding, desarrollo web, eventos, producción audiovisual) está en `src/data/servicios.ts`. Un módulo con `servicio: desarrollo-web` lo trae completo y la propuesta solo escribe lo que cambia. Ejemplo de propuesta de un solo servicio: `src/content/propuestas/07-26/omoda-jaecoo-uxsd.md`.
 
+## Propuestas en inglés
+Con `idioma: en` en el encabezado, la plantilla, el contenido de SWIITCH (`agenciaEn` en `src/data/agencia.ts`) y los servicios (`src/data/servicios.en.ts`) salen en inglés, y el pie muestra la oficina de Miami. Ejemplo: `src/content/propuestas/10-26/mccuskey-t7nn.md`.
+
 ## Ver y publicar
 - `npm install` (solo la primera vez)
 - `npm run dev` para verla en http://localhost:4321/MM-YY/cliente-xxxx/

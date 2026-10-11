@@ -1,17 +1,20 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Icon from '../components/Icon.astro';
-import { agencia, nombresClientes } from '../data/agencia';
+import { agencias, nombresClientes } from '../data/agencia';
+import { textos } from '../data/textos';
 
 interface Props {
   data: CollectionEntry<'propuestas'>['data'];
 }
 
 const { data } = Astro.props;
-const fmt = new Intl.DateTimeFormat('es-BO', { day: 'numeric', month: 'long', year: 'numeric' });
+const t = textos[data.idioma];
+const agencia = agencias[data.idioma];
+const fmt = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
 const vence = new Date(data.fecha);
 vence.setDate(vence.getDate() + data.vigenciaDias);
-const mes = new Intl.DateTimeFormat('es-BO', { month: 'long', timeZone: 'UTC' }).format(data.fecha);
+const mes = new Intl.DateTimeFormat(t.locale, { month: 'long', timeZone: 'UTC' }).format(data.fecha);
 const mesAnio = `${mes.charAt(0).toUpperCase()}${mes.slice(1)} ${data.fecha.getUTCFullYear()}`;
 const ver = (s: string) => !data.ocultar.includes(s as never);
 const dos = (n: number) => String(n + 1).padStart(2, '0');
@@ -19,7 +22,7 @@ const slug = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
 const { contacto } = agencia;
-const mensaje = encodeURIComponent(`Hola SWIITCH, quiero avanzar con la propuesta "${data.titulo}" para ${data.cliente}.`);
+const mensaje = encodeURIComponent(t.mensajeWhatsapp(data.titulo, data.cliente));
 const whatsapp = `https://wa.me/${contacto.whatsapp}?text=${mensaje}`;
 // Texto con **negritas**: se escapa el HTML y solo se convierte el doble asterisco
 const negritas = (t: string) =>
@@ -27,16 +30,16 @@ const negritas = (t: string) =>
 const logo = (id: string) => ({ src: `/clientes/${id}.webp`, alt: nombresClientes[id] ?? id });
 
 const nav = [
-  ver('nosotros') && { href: '#nosotros', label: 'Nosotros' },
-  { href: '#situacion', label: 'Situación' },
-  data.modulos.length > 0 && { href: '#propuesta', label: 'Propuesta' },
-  data.kickoff.length > 0 && { href: '#kickoff', label: 'Kick off' },
-  { href: '#inversion', label: 'Inversión' },
-  { href: '#contacto', label: 'Contacto' },
+  ver('nosotros') && { href: '#nosotros', label: t.nav.nosotros },
+  { href: '#situacion', label: t.nav.situacion },
+  data.modulos.length > 0 && { href: '#propuesta', label: t.nav.propuesta },
+  data.kickoff.length > 0 && { href: '#kickoff', label: t.nav.kickoff },
+  { href: '#inversion', label: t.nav.inversion },
+  { href: '#contacto', label: t.nav.contacto },
 ].filter(Boolean) as { href: string; label: string }[];
 ---
 <!doctype html>
-<html lang="es">
+<html lang={data.idioma}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -55,16 +58,16 @@ const nav = [
     <!-- Menú fijo: transparente sobre el hero, blanco al hacer scroll -->
     <header class="nav" data-nav>
       <div class="nav__in">
-        <a class="nav__logo" href="#inicio" aria-label="SWIITCH, ir al inicio">
+        <a class="nav__logo" href="#inicio" aria-label={t.irInicio}>
           <img src="/marca/swiitch-rojo.png" alt="SWIITCH" width="132" height="40" />
         </a>
-        <nav class="nav__links" id="menu" aria-label="Secciones">
+        <nav class="nav__links" id="menu" aria-label={t.secciones}>
           {nav.map((n) => <a href={n.href}>{n.label}</a>)}
           <a class="btn btn--sm nav__cta" href={whatsapp} target="_blank" rel="noopener">
-            Aceptar propuesta <Icon name="chevron-right" size={18} />
+            {t.aceptar} <Icon name="chevron-right" size={18} />
           </a>
         </nav>
-        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú" data-menu>
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label={t.abrirMenu} data-menu>
           <Icon name="menu" />
         </button>
       </div>
@@ -77,7 +80,7 @@ const nav = [
           <div class="hero__texto">
             <p class="eyebrow eyebrow--dark" data-reveal="left">
               <span class="switch" aria-hidden="true"><span></span></span>
-              Propuesta para {data.cliente}
+              {t.propuestaPara} {data.cliente}
             </p>
             <h1 class="hero__titulo" data-reveal="up" style="--d:120ms">{data.titulo}</h1>
             {data.bajada && <p class="hero__bajada" data-reveal="up" style="--d:240ms">{data.bajada}</p>}
@@ -91,7 +94,7 @@ const nav = [
                 <img src={data.imagenHero} alt={data.cliente} width="800" height="600" fetchpriority="high" />
               </div>
               {data.logoCliente && (
-                <div class="hero__logo"><img src={data.logoCliente} alt={`Logo de ${data.cliente}`} /></div>
+                <div class="hero__logo"><img src={data.logoCliente} alt={t.logoDe(data.cliente)} /></div>
               )}
             </div>
           )}
@@ -99,7 +102,7 @@ const nav = [
       </section>
 
       <!-- Diferenciales de SWIITCH: tarjetas que suben sobre el hero -->
-      <div class="wrap resumen" aria-label="Por qué SWIITCH">
+      <div class="wrap resumen" aria-label={t.porQue}>
         {agencia.diferenciales.map((d, i) => (
           <article class="tarjeta tarjeta--fill" tabindex="0" data-reveal="up" style={`--d:${i * 120}ms`}>
             <span class="tarjeta__icono"><Icon name={d.icono} size={44} stroke={1.5} /></span>
@@ -115,15 +118,15 @@ const nav = [
           <div class="wrap dos-col">
             <div class="nosotros__media" data-reveal="left">
               <div class="foto foto--acento foto--izq">
-                <img src={agencia.nosotros.imagen} alt="Equipo de SWIITCH trabajando" loading="lazy" />
+                <img src={agencia.nosotros.imagen} alt={t.fotoEquipo} loading="lazy" />
               </div>
               <div class="sello">
                 <strong data-count="15">15</strong><span>+</span>
-                <small>Años de experiencia</small>
+                <small>{t.anios}</small>
               </div>
             </div>
             <div>
-              <p class="eyebrow" data-reveal="right">Quiénes somos</p>
+              <p class="eyebrow" data-reveal="right">{t.quienesSomos}</p>
               <h2 data-reveal="up">{agencia.nosotros.titulo}</h2>
               <p class="texto" data-reveal="up">{agencia.nosotros.quienesSomos}</p>
               <p class="texto" data-reveal="up">{agencia.nosotros.queHacemos}</p>
@@ -135,7 +138,7 @@ const nav = [
 
       <!-- Franja de cifras -->
       {ver('cifras') && (
-        <section class="cifras" aria-label="SWIITCH en cifras">
+        <section class="cifras" aria-label={t.enCifras}>
           <div class="wrap cifras__grid">
             {agencia.cifras.map((c, i) => (
               <div class="cifra" data-reveal="up" style={`--d:${i * 100}ms`}>
@@ -153,8 +156,8 @@ const nav = [
           <div class="wrap">
             <div class="cabecera">
               <div>
-                <p class="eyebrow" data-reveal="left">Nuestros servicios</p>
-                <h2 data-reveal="up">Todo lo que tu marca necesita</h2>
+                <p class="eyebrow" data-reveal="left">{t.nuestrosServicios}</p>
+                <h2 data-reveal="up">{t.todoLoQue}</h2>
               </div>
             </div>
             <div class="grid-3">
@@ -174,7 +177,7 @@ const nav = [
       {ver('clientes') && (
         <section class="clientes" aria-labelledby="t-clientes">
           <div class="wrap">
-            <p class="eyebrow eyebrow--centro" id="t-clientes" data-reveal="down">Algunos clientes</p>
+            <p class="eyebrow eyebrow--centro" id="t-clientes" data-reveal="down">{t.algunosClientes}</p>
           </div>
           <div class="marquesina" data-reveal="up">
             <div class="marquesina__pista">
@@ -192,8 +195,8 @@ const nav = [
       {ver('metodo') && (
         <section class="seccion seccion--alt" id="metodo">
           <div class="wrap">
-            <p class="eyebrow" data-reveal="left">Cómo trabajamos</p>
-            <h2 data-reveal="up">Un método que se mide</h2>
+            <p class="eyebrow" data-reveal="left">{t.comoTrabajamos}</p>
+            <h2 data-reveal="up">{t.unMetodo}</h2>
             <ol class="metodo">
               {agencia.metodo.map((m, i) => (
                 <li data-reveal="up" style={`--d:${i * 140}ms`}>
@@ -211,8 +214,8 @@ const nav = [
       <!-- 6. Situación actual -->
       <section class="seccion" id="situacion">
         <div class="wrap estrecho">
-          <p class="eyebrow" data-reveal="left">Situación actual</p>
-          <h2 data-reveal="up">Dónde está {data.cliente} hoy</h2>
+          <p class="eyebrow" data-reveal="left">{t.situacion}</p>
+          <h2 data-reveal="up">{t.dondeEsta(data.cliente)}</h2>
           {data.situacion.map((p) => <p class="texto" data-reveal="up" set:html={negritas(p)} />)}
           {data.cita && <blockquote class="cita cita--grande" data-reveal="up" set:html={negritas(data.cita)} />}
         </div>
@@ -221,7 +224,7 @@ const nav = [
       <!-- 7. Requerimiento -->
       <section class="banda" style={data.imagenRequerimiento ? `--foto:url(${data.imagenRequerimiento})` : undefined}>
         <div class="wrap estrecho">
-          <p class="eyebrow eyebrow--dark" data-reveal="left">Requerimiento</p>
+          <p class="eyebrow eyebrow--dark" data-reveal="left">{t.requerimiento}</p>
           <p class="banda__texto" data-reveal="up">{data.requerimiento}</p>
         </div>
       </section>
@@ -230,20 +233,20 @@ const nav = [
       {data.modulos.length > 0 && (
         <section class="seccion" id="propuesta">
           <div class="wrap">
-            <p class="eyebrow" data-reveal="left">Nuestra propuesta</p>
-            <h2 data-reveal="up">Lo que haremos juntos</h2>
+            <p class="eyebrow" data-reveal="left">{t.nuestraPropuesta}</p>
+            <h2 data-reveal="up">{t.loQueHaremos}</h2>
           </div>
           {data.modulos.map((m, i) => {
             // Estrategia, enfoque y los bloques libres se muestran igual, alternando el rojo
             const textos = [
-              m.estrategia && { titulo: 'Estrategia', texto: m.estrategia },
-              m.enfoque && { titulo: 'Enfoque', texto: m.enfoque },
+              m.estrategia && { titulo: t.estrategia, texto: m.estrategia },
+              m.enfoque && { titulo: t.enfoque, texto: m.enfoque },
               ...(m.bloques ?? []),
             ].filter(Boolean) as { titulo: string; texto: string }[];
             return (
             <article class:list={['modulo', { 'modulo--inv': i % 2 === 1 }]} id={slug(m.titulo)}>
               <div class="wrap">
-                <div class="dos-col modulo__cabeza">
+                <div class:list={['modulo__cabeza', m.imagen ? 'dos-col' : 'modulo__cabeza--sola']}>
                   {m.imagen && (
                     <div class="modulo__media" data-reveal={i % 2 ? 'right' : 'left'}>
                       <div class:list={['foto', 'foto--acento', { 'foto--izq': i % 2 === 0, 'foto--recorte': m.imagen.endsWith('.webp') }]}>
@@ -256,18 +259,20 @@ const nav = [
                     <h3 class="modulo__titulo" data-reveal="up">{m.titulo}</h3>
                     {m.subtitulo && <p class="modulo__sub" data-reveal="up">{m.subtitulo}</p>}
                     {m.plazo && <p class="modulo__plazo" data-reveal="up"><Icon name="clock" size={18} />{m.plazo}</p>}
-                    {textos.map((b, k) => (
-                      <div class:list={['bloque', { 'bloque--rojo': k % 2 === 1 }]} data-reveal="up">
-                        <h4>{b.titulo}</h4>
-                        <p>{b.texto}</p>
-                      </div>
-                    ))}
+                    <div class="bloques">
+                      {textos.map((b, k) => (
+                        <div class:list={['bloque', { 'bloque--rojo': k % 2 === 1 }]} data-reveal="up">
+                          <h4>{b.titulo}</h4>
+                          <p>{b.texto}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
                 {m.incluye.length > 0 && (
                   <div class="incluye">
-                    <h4 class="sub" data-reveal="up">Qué incluye</h4>
+                    <h4 class="sub" data-reveal="up">{t.queIncluye}</h4>
                     <ul class="checks">
                       {m.incluye.map((it, k) => (
                         <li data-reveal="up" style={`--d:${(k % 6) * 70}ms`}><Icon name="check" size={20} />{it}</li>
@@ -278,7 +283,7 @@ const nav = [
 
                 {m.alcance && m.alcance.length > 0 && (
                   <div class="extra">
-                    <h4 class="sub" data-reveal="up">Alcance</h4>
+                    <h4 class="sub" data-reveal="up">{t.alcance}</h4>
                     <ul class="alcance">
                       {m.alcance.map((a, k) => (
                         <li data-reveal="up" style={`--d:${(k % 6) * 70}ms`}>
@@ -353,8 +358,8 @@ const nav = [
       {data.kickoff.length > 0 && (
         <section class="seccion kickoff" id="kickoff">
           <div class="wrap">
-            <p class="eyebrow eyebrow--dark" data-reveal="left">Kick off</p>
-            <h2 data-reveal="up">Pasos para iniciar el proyecto</h2>
+            <p class="eyebrow eyebrow--dark" data-reveal="left">{t.kickoff}</p>
+            <h2 data-reveal="up">{t.pasosInicio}</h2>
             <ol class="kickoff__pasos">
               {data.kickoff.map((k, i) => (
                 <li data-reveal="up" style={`--d:${(i % 4) * 110}ms`}>
@@ -373,10 +378,10 @@ const nav = [
         <div class="wrap">
           <div class="cabecera">
             <div>
-              <p class="eyebrow" data-reveal="left">Inversión</p>
-              <h2 data-reveal="up">Planes y honorarios</h2>
+              <p class="eyebrow" data-reveal="left">{t.inversion}</p>
+              <h2 data-reveal="up">{t.planes}</h2>
             </div>
-            <p class="texto cabecera__lado" data-reveal="up">Propuesta válida hasta el {fmt.format(vence)}.</p>
+            <p class="texto cabecera__lado" data-reveal="up">{t.validaHasta(fmt.format(vence))}</p>
           </div>
           <div class="precios">
             {data.inversion.items.map((it, i) => (
@@ -403,14 +408,14 @@ const nav = [
       <!-- 11. Cierre -->
       <section class="banda banda--cierre" id="contacto" style={data.imagenHero ? `--foto:url(${data.imagenHero})` : undefined}>
         <div class="wrap centro">
-          <p class="eyebrow eyebrow--dark eyebrow--centro" data-reveal="down">Conversemos</p>
-          <h2 class="display" data-reveal="up">¿Avanzamos?</h2>
-          <p class="banda__bajada" data-reveal="up">Cuéntanos qué te pareció la propuesta y coordinamos el kick off.</p>
+          <p class="eyebrow eyebrow--dark eyebrow--centro" data-reveal="down">{t.conversemos}</p>
+          <h2 class="display" data-reveal="up">{t.avanzamos}</h2>
+          <p class="banda__bajada" data-reveal="up">{t.cuentanos}</p>
           <div class="cierre__ctas" data-reveal="up">
             <a class="btn btn--slider" href={whatsapp} target="_blank" rel="noopener">
-              Aceptar por WhatsApp <Icon name="chevron-right" size={20} />
+              {t.aceptarWhatsapp} <Icon name="chevron-right" size={20} />
             </a>
-            <a class="enlace-claro" href={`mailto:${contacto.email}?subject=${encodeURIComponent(`Propuesta ${data.cliente}`)}`}>
+            <a class="enlace-claro" href={`mailto:${contacto.email}?subject=${encodeURIComponent(t.asuntoCorreo(data.cliente))}`}>
               <Icon name="mail" size={18} /> {contacto.email}
             </a>
           </div>
@@ -422,26 +427,26 @@ const nav = [
       <div class="wrap pie__grid">
         <div>
           <img class="pie__logo" src="/marca/swiitch-footer-rojo.png" alt="SWIITCH" width="160" height="43" loading="lazy" />
-          <p>Agencia de marketing, comunicación, branding y transformación digital.</p>
+          <p>{t.pieLema}</p>
         </div>
         <div>
-          <p class="pie__titulo">Oficina</p>
+          <p class="pie__titulo">{t.oficina}</p>
           <p class="pie__dato"><Icon name="map-pin" size={18} /><span>{contacto.direccion.map((l) => <>{l}<br /></>)}</span></p>
         </div>
         <div>
-          <p class="pie__titulo">Contacto</p>
-          <p class="pie__dato"><Icon name="phone" size={18} /><a href={`tel:+${contacto.whatsapp}`}>{contacto.telefono}</a></p>
+          <p class="pie__titulo">{t.contacto}</p>
+          <p class="pie__dato"><Icon name="phone" size={18} /><a href={`tel:+${contacto.telefono.replace(/\D/g, '')}`}>{contacto.telefono}</a></p>
           <p class="pie__dato"><Icon name="mail" size={18} /><a href={`mailto:${contacto.email}`}>{contacto.email}</a></p>
-          <p class="pie__dato"><Icon name="arrow-up-right" size={18} /><a href={contacto.web} target="_blank" rel="noopener">swiitchad.com</a></p>
+          <p class="pie__dato"><Icon name="arrow-up-right" size={18} /><a href={contacto.web} target="_blank" rel="noopener">{new URL(contacto.web).host.replace(/^www\./, '')}</a></p>
         </div>
       </div>
       <div class="wrap pie__base">
-        <span>Santa Cruz de la Sierra · Miami</span>
-        <span>Propuesta confidencial para {data.cliente}</span>
+        <span>{contacto.oficinas.join(' · ')}</span>
+        <span>{t.confidencial(data.cliente)}</span>
       </div>
     </footer>
 
-    <a class="fab" href={whatsapp} target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+    <a class="fab" href={whatsapp} target="_blank" rel="noopener" aria-label={t.escribirWhatsapp}>
       <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.42.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35M12.05 21.8h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.29A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.16-3.48-8.41"/></svg>
     </a>
 
@@ -468,7 +473,7 @@ const nav = [
           const end = Number(el.dataset.count); const t0 = performance.now(); const dur = 1800;
           const tick = (t) => {
             const p = Math.min((t - t0) / dur, 1);
-            el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString('es-BO');
+            el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString(document.documentElement.lang);
             if (p < 1) requestAnimationFrame(tick);
           };
           requestAnimationFrame(tick);
@@ -708,6 +713,9 @@ const nav = [
       .tabla thead th { background: var(--primary); color: #fff; font-weight: 700; }
       .tabla tbody th { color: var(--heading); font-weight: 700; background: var(--surface-alt); }
       .tabla td { color: var(--heading); }
+      .modulo__cabeza--sola .bloques { display: grid; gap: 16px; margin-top: 8px; }
+      @media (min-width: 768px) { .modulo__cabeza--sola .bloques { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
+      .modulo__cabeza--sola .bloque { margin-top: 0; }
       .bloque { background: var(--surface-alt); padding: 20px 24px; border-radius: var(--r-sm); margin-top: 16px; }
       .bloque h4 { font: 700 15px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 6px; }
       .bloque p { margin: 0; }
@@ -730,8 +738,8 @@ const nav = [
       .kickoff { background: var(--primary); color: #fff; }
       .kickoff h2 { color: #fff; }
       .kickoff .eyebrow--dark::before { background: #fff; }
-      .kickoff__pasos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1px; background: rgba(255, 255, 255, 0.35); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-      .kickoff__pasos li { background: var(--primary); padding: 28px 24px; transition: background-color 0.3s ease; }
+      .kickoff__pasos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+      .kickoff__pasos li { background: var(--primary); padding: 28px 24px; border: 1px solid rgba(255, 255, 255, 0.35); margin: 0 -1px -1px 0; transition: background-color 0.3s ease; }
       .kickoff__pasos li:hover { background: var(--primary-hover); }
       .kickoff__num { display: block; font: 400 36px/1 var(--font-display); color: rgba(255, 255, 255, 0.55); margin-bottom: 14px; }
       .kickoff__pasos strong { display: block; font-size: 18px; line-height: 1.35; }

@@ -7,6 +7,7 @@ blanco: Claude usa el texto por defecto del servicio.
 
 ```
 Cliente:
+Idioma:                         español o inglés
 Mes de la propuesta:            (ej. julio 2026)
 Título:                         (ej. Diseño y desarrollo web)
 Servicios:                      social media, branding, desarrollo web, eventos, producción audiovisual u otro
@@ -34,4 +35,5 @@ cambia para este cliente.
 | Producción fotográfica y audiovisual | `produccion-audiovisual` |
 
 Un servicio nuevo se agrega una sola vez en ese archivo y queda disponible
-para todas las propuestas.
+para todas las propuestas. Para usarlo en inglés, también va en
+`src/data/servicios.en.ts` (hoy solo tiene Social Media).

@@ -115,3 +115,66 @@ export const nombresClientes: Record<string, string> = {
   'pedro-del-brete': 'Pedro del Brete', simpleclaims: 'Simple Claims', 'signature-trust': 'Signature Trust',
   'santa-cruz-watch': 'Santa Cruz Watch Co.',
 };
+
+// Versión en inglés, para propuestas con `idioma: en`. Lo que no cambia con
+// el idioma (imagen, clientes, WhatsApp) se toma de la versión en español.
+export const agenciaEn: typeof agencia = {
+  ...agencia,
+  nosotros: {
+    titulo: 'Driving companies toward digital transformation',
+    quienesSomos:
+      'We are an agency specialized in marketing strategy, communications, branding and digital transformation, with a multidisciplinary team led by executive directors with more than 15 years of experience. At SWIITCH we share one passion: delivering tailored solutions to specific business challenges.',
+    queHacemos:
+      'We design and run digital and traditional strategies, from web design and social media marketing to influencer management, public relations, corporate events, BTL and point-of-sale activations.',
+    mision:
+      "Our mission is simple: to meet and exceed our clients' goals, whether they are about brand, sales or any other objective that matters to their success.",
+    imagen: agencia.nosotros.imagen,
+  },
+  diferenciales: [
+    {
+      icono: 'trending-up',
+      titulo: 'A boutique agency focused on results',
+      texto: 'Close collaboration, with managing partners who bring more than 15 years of experience to every decision and keep their eyes on your business results.',
+    },
+    {
+      icono: 'target',
+      titulo: 'Tailored strategies',
+      texto: 'We do not sell generic packages: we design every solution for the specific challenge in front of us and stay with you through execution.',
+    },
+    {
+      icono: 'users',
+      titulo: 'Multidisciplinary team',
+      texto: 'Specialists in every area of the business, working together to deliver the best results.',
+    },
+  ],
+  cifras: [
+    { valor: 15, sufijo: '+', etiqueta: 'Years of experience' },
+    { valor: 30, sufijo: '+', etiqueta: 'Brands that trust us' },
+    { valor: 2, sufijo: '', etiqueta: 'Offices: Santa Cruz and Miami' },
+    { valor: 100, sufijo: '%', etiqueta: 'Measurable actions' },
+  ],
+  servicios: [
+    { area: 'Marketing', icono: 'target', items: ['Social Media Marketing', 'Influencer Marketing', 'Web Design', 'Marketing Advisory'] },
+    { area: 'Communications', icono: 'users', items: ['Corporate Communications', 'Public Relations', 'Event Management'] },
+    { area: 'Advertising', icono: 'trending-up', items: ['Creative Advertising', 'Branding and Corporate Identity', 'BTL and Activations', 'Media Planning and Buying'] },
+  ],
+  metodo: [
+    { titulo: 'Analysis', icono: 'search', texto: 'We start with internal and external research on the company, finding business opportunities that connect emotionally with your market.' },
+    { titulo: 'Strategy', icono: 'target', texto: 'We create solutions that build value, innovation and user-centered experiences to place your brand in the minds and hearts of your customers.' },
+    { titulo: 'Execution', icono: 'trending-up', texto: 'We put the processes in place and stay with you through the activities needed to win new customers, keep current ones and set your business apart.' },
+    { titulo: 'Measurement', icono: 'bar-chart', texto: 'What is not measured cannot be improved. We measure the return on your investment and evaluate results to reach your goals.' },
+  ],
+  notasInversion: [
+    'Fees were estimated based on the working hours of the team members involved. Our agency model includes significant involvement from the managing partners, who bring their experience to every key decision.',
+    'Agency fees do not include advertising spend. All paid media costs are approved and paid directly by the client.',
+    'Any audiovisual production required (video, professional photography, models and influencers, venue and set rental) is not included in the agency fee and will be quoted and approved separately.',
+  ],
+  contacto: {
+    ...agencia.contacto,
+    direccion: ['1900 N Bayshore Dr', 'Miami, FL 33132', 'United States'],
+    telefono: '+1 (305) 458-1532',
+    web: 'https://miami.swiitchad.com',
+  },
+};
+
+export const agencias = { es: agencia, en: agenciaEn };
