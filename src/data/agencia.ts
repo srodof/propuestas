@@ -62,6 +62,8 @@ export const agencia = {
     'bmw', 'jeep', 'bacardi', 'johnsons', 'neutrogena', 'listerine', 'sundown', 'mitsubishi',
     'chery', 'jmc', 'embol', 'yango', 'telio', 'essen', 'aico', 'belen', 'green-tower',
     'ballerina', 'femenina', 'yogen-fruz', 'cenace', 'astara', 'ayvanna-rever', 'across',
+    'colorshop', 'cuarta-dimension', 'helados-cayara', 'iu', 'memorial-park', 'rafcar', 'sirius',
+    'tl-attorneys',
   ],
 
   metodo: [
@@ -113,7 +115,9 @@ export const nombresClientes: Record<string, string> = {
   femenina: 'Femenina', 'yogen-fruz': 'Yogen Früz', cenace: 'CENACE UPSA', astara: 'Astara Ovando',
   'ayvanna-rever': 'Ayvanna Rêver', across: 'Across Rent a Car', roho: 'ROHO Homecenter',
   'pedro-del-brete': 'Pedro del Brete', simpleclaims: 'Simple Claims', 'signature-trust': 'Signature Trust',
-  'santa-cruz-watch': 'Santa Cruz Watch Co.',
+  'santa-cruz-watch': 'Santa Cruz Watch Co.', colorshop: 'Colorshop', 'cuarta-dimension': 'Cuarta Dimensión',
+  'helados-cayara': 'Helados Cayara', iu: 'iU', 'memorial-park': 'Memorial Park', rafcar: 'Rafcar Motors',
+  sirius: 'Sirius', 'tl-attorneys': 'TL Attorneys PA',
 };
 
 // Versión en inglés, para propuestas con `idioma: en`. Lo que no cambia con
