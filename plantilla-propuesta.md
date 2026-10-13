@@ -33,6 +33,9 @@ modulos:
     #   columnas: [Criterio, Opción A, Opción B]
     #   filas:
     #     - [Edición, "Texto con, comas entre comillas", Otro texto]
+    # galeria:
+    #   titulo: Trabajos anteriores
+    #   fotos: [/propuestas/MM-YY/cliente-xxxx/foto-1.jpg, /propuestas/MM-YY/cliente-xxxx/foto-2.jpg]
 # kickoff: si lo dejas vacío se arma con los pasos de cada servicio.
 inversion:
   moneda: Bs.

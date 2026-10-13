@@ -336,6 +336,18 @@ const nav = [
                   </div>
                 )}
 
+                {m.galeria && (
+                  <div class="extra">
+                    <h4 class="sub" data-reveal="up">{m.galeria.titulo}</h4>
+                    {m.galeria.texto && <p class="texto estrecho-izq" data-reveal="up">{m.galeria.texto}</p>}
+                    <div class="galeria">
+                      {m.galeria.fotos.map((src, k) => (
+                        <img src={src} alt="" loading="lazy" data-reveal="up" style={`--d:${k * 100}ms`} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {m.casos && (
                   <div class="extra">
                     <h4 class="sub" data-reveal="up">{m.casos.titulo}</h4>
@@ -732,6 +744,8 @@ const nav = [
       .pasos li { background: var(--surface-alt); padding: 24px; border-radius: var(--r-sm); color: var(--heading); font-weight: 700; position: relative; }
       .pasos span { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--r-sm); background: var(--primary); color: #fff; font-family: var(--font-display); margin-bottom: 14px; }
       .casos { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin-top: 1.5rem; }
+      .galeria { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 1.5rem; }
+      .galeria img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-sm); }
       .casos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--r-sm); }
 
       /* Kick off */
