@@ -59,11 +59,9 @@ export const agencia = {
   ],
 
   clientes: [
-    'bmw', 'jeep', 'bacardi', 'johnsons', 'neutrogena', 'listerine', 'sundown', 'mitsubishi',
-    'chery', 'jmc', 'embol', 'yango', 'telio', 'essen', 'aico', 'belen', 'green-tower',
-    'ballerina', 'femenina', 'yogen-fruz', 'cenace', 'astara', 'ayvanna-rever', 'across',
-    'colorshop', 'cuarta-dimension', 'helados-cayara', 'iu', 'memorial-park', 'rafcar', 'sirius',
-    'tl-attorneys',
+    'bmw', 'johnsons', 'neutrogena', 'listerine', 'sundown', 'chery', 'embol', 'essen', 'aico',
+    'grupo-doria-medina', 'green-tower', 'ballerina', 'yogen-fruz', 'cenace', 'ayvanna-rever',
+    'colorshop', 'cuarta-dimension', 'helados-cayara', 'iu', 'memorial-park', 'rafcar', 'tl-attorneys',
   ],
 
   metodo: [
@@ -108,16 +106,15 @@ export const agencia = {
 
 // Nombres para el texto alternativo de los logos de clientes.
 export const nombresClientes: Record<string, string> = {
-  bmw: 'BMW', jeep: 'Jeep', bacardi: 'Bacardí', johnsons: "Johnson's", neutrogena: 'Neutrogena',
-  listerine: 'Listerine', sundown: 'Sundown', mitsubishi: 'Mitsubishi Motors', chery: 'Chery', jmc: 'JMC',
-  embol: 'Embol', yango: 'Yango', telio: 'Telio', 'telio-amarillo': 'Telio', essen: 'Essen',
-  aico: 'AICO Financial', belen: 'Belén', 'green-tower': 'Green Tower', ballerina: 'Ballerina',
-  femenina: 'Femenina', 'yogen-fruz': 'Yogen Früz', cenace: 'CENACE UPSA', astara: 'Astara Ovando',
-  'ayvanna-rever': 'Ayvanna Rêver', across: 'Across Rent a Car', roho: 'ROHO Homecenter',
-  'pedro-del-brete': 'Pedro del Brete', simpleclaims: 'Simple Claims', 'signature-trust': 'Signature Trust',
-  'santa-cruz-watch': 'Santa Cruz Watch Co.', colorshop: 'Colorshop', 'cuarta-dimension': 'Cuarta Dimensión',
+  bmw: 'BMW', johnsons: "Johnson's", neutrogena: 'Neutrogena', listerine: 'Listerine', sundown: 'Sundown',
+  chery: 'Chery', embol: 'Embol', essen: 'Essen', aico: 'AICO Financial', 'grupo-doria-medina': 'Grupo Doria Medina',
+  'green-tower': 'Green Tower', ballerina: 'Ballerina', 'yogen-fruz': 'Yogen Früz', cenace: 'CENACE UPSA',
+  'ayvanna-rever': 'Ayvanna Rêver', colorshop: 'Colorshop', 'cuarta-dimension': 'Cuarta Dimensión',
   'helados-cayara': 'Helados Cayara', iu: 'iU', 'memorial-park': 'Memorial Park', rafcar: 'Rafcar Motors',
-  sirius: 'Sirius', 'tl-attorneys': 'TL Attorneys PA',
+  'tl-attorneys': 'TL Attorneys PA',
+  // Logos de casos de éxito (no salen en la franja de clientes)
+  roho: 'ROHO Homecenter', 'pedro-del-brete': 'Pedro del Brete', simpleclaims: 'Simple Claims',
+  'signature-trust': 'Signature Trust', 'telio-amarillo': 'Telio', 'santa-cruz-watch': 'Santa Cruz Watch Co.',
 };
 
 // Versión en inglés, para propuestas con `idioma: en`. Lo que no cambia con
