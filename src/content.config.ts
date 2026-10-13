@@ -46,6 +46,10 @@ const modulo = z.object({
   casos: z
     .object({ titulo: z.string(), texto: z.string().optional(), logos: z.array(z.string()) })
     .optional(),
+  // Fotos de trabajos anteriores (portafolio del equipo o proveedor)
+  galeria: z
+    .object({ titulo: z.string(), texto: z.string().optional(), fotos: z.array(z.string()).min(1) })
+    .optional(),
 });
 
 type Modulo = z.infer<typeof modulo>;
