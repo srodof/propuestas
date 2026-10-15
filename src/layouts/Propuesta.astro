@@ -401,7 +401,7 @@ const nav = [
                 <p class="precio__servicio">{it.servicio}</p>
                 <h3>{it.concepto}</h3>
                 <p class="precio__monto">
-                  <small>{data.inversion.moneda}</small>
+                  {!it.monto.endsWith('%') && <small>{data.inversion.moneda}</small>}
                   <span>{it.monto}</span>
                   {it.periodo && <small>{it.periodo}</small>}
                 </p>
