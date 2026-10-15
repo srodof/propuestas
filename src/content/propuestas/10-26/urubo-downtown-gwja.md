@@ -26,7 +26,7 @@ modulos:
     incluye:
       - Concepto creativo del evento, narrativa y línea visual.
       - Diseño del recorrido del invitado, de la invitación al cierre.
-      - Búsqueda de locación y cotización de 2 a 3 proveedores por rubro.
+      - Búsqueda de locación y cotización de 2 proveedores por rubro.
       - Negociación y optimización de proveedores, cuidando el estándar del evento.
       - Sistema de invitaciones, seguimiento, confirmación y reconfirmación.
       - Guion de la presentación, orden de intervenciones y revisión del video.
@@ -73,6 +73,6 @@ inversion:
         - "Ejemplo: un evento de Bs. 180.000 lleva un fee de Bs. 21.600"
   notas:
     - Como el evento involucra muchos proveedores y todavía no hay cotizaciones reales, el fee se presenta según el presupuesto de ejecución. Hasta Bs. 125.000 de ejecución el fee es fijo de Bs. 15.000; por encima de ese monto se cobra el 12% del total del evento.
-    - Los costos de producción y proveedores (locación, gastronomía, sonido, pantallas, iluminación, mobiliario, maestra/o de ceremonias, cobertura audiovisual y otros) no están incluidos en el fee. Se presentarán con 2 a 3 opciones por rubro para aprobación del cliente.
+    - Los costos de producción y proveedores (locación, gastronomía, sonido, pantallas, iluminación, mobiliario, maestra/o de ceremonias, cobertura audiovisual y otros) no están incluidos en el fee. Se presentarán con 2 opciones por rubro para aprobación del cliente.
     - El presupuesto final de ejecución se definirá una vez aprobados el concepto creativo, la locación y la cantidad final de asistentes.
 ---
