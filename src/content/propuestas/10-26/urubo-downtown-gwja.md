@@ -8,7 +8,7 @@ situacion:
   - "**Urubó Downtown** se presenta como una **nueva centralidad urbana planificada**, no como un proyecto inmobiliario aislado: actividad económica, educación, salud, residencia, servicios, comunidad y espacios públicos integrados en una visión de largo plazo para el crecimiento de Santa Cruz."
   - El evento debe sentirse **exclusivo y memorable sin caer en la ostentación**. La diferencia la harán el concepto, la experiencia, la armonía visual y la calidad de cada detalle.
 cita: Una nueva forma de pensar la ciudad merece una presentación a la altura. **Hagamos que Urubó Downtown se lance con visión.**
-requerimiento: Conceptualización, organización y ejecución del evento de lanzamiento de Urubó Downtown, un encuentro exclusivo para 50 a 60 invitados de alto valor. Fecha tentativa, primera quincena de diciembre de 2026.
+requerimiento: Conceptualización, organización y ejecución del evento de lanzamiento de Urubó Downtown, un encuentro exclusivo para alrededor de 100 invitados de alto valor. Fecha tentativa, primera quincena de diciembre de 2026.
 
 modulos:
   - servicio: eventos
@@ -21,7 +21,7 @@ modulos:
       - titulo: Objetivo
         texto: Presentar formalmente Urubó Downtown ante un grupo seleccionado de stakeholders, posicionarlo como un proyecto de alto nivel y visión urbana de largo plazo, y lograr que la repercusión llegue más allá de los asistentes.
       - titulo: Perfil del evento
-        texto: Exclusivo, no masivo. Entre 50 y 60 asistentes efectivos, sobre una base de invitados más amplia para cubrir rechazos, ausencias y reemplazos. Formato formal o semiformal, con una ejecución sofisticada y cuidada.
+        texto: Exclusivo, no masivo. Alrededor de 100 personas, entre 30 parejas y 30 invitados, sobre una base de invitados más amplia para cubrir rechazos, ausencias y reemplazos. Formato formal o semiformal, con una ejecución sofisticada y cuidada.
     incluye:
       - Concepto creativo del evento, narrativa y línea visual.
       - Diseño del recorrido del invitado, de la invitación al cierre.
