@@ -96,8 +96,8 @@ export const agencia = {
 
   contacto: {
     direccion: ['Av. San Martín, Calle J', 'Edificio Manzana 40, Torre 2, Piso 9', 'Santa Cruz de la Sierra, Bolivia'],
-    telefono: '(591) 779 44824',
-    whatsapp: '59177944824',
+    telefono: '(591) 755 30006',
+    whatsapp: '59175530006',
     email: 'info@swiitchad.com',
     web: 'https://www.swiitchad.com',
     oficinas: ['Santa Cruz de la Sierra', 'Miami'],
