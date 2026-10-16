@@ -185,7 +185,7 @@ export function Footer({ logo, logoAlt = 'SWIITCH' }) {
             Manzana 40 Piso 9, Torre 2, Santa Cruz de la Sierra, Bolivia
           </div>
           <div style={{ ...row, alignItems: 'center', marginBottom: 20 }}>
-            <Icon name="phone" size={15} color="var(--primary)" /> (+591) 779 44824
+            <Icon name="phone" size={15} color="var(--primary)" /> (+591) 755 30006
           </div>
           <div style={label}>USA</div>
           <div style={{ ...row, marginBottom: 20 }}>
