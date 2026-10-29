@@ -1,24 +1,26 @@
 ---
+linea: produccion-audiovisual
+urlsAnteriores: [/10-26/rafcar-motors-g7qx/]
 cliente: Rafcar Motors
 titulo: Cobertura audiovisual Caravana Legado Jimny
 bajada: Una experiencia que merece ser capturada. Fotografía, video y contenido para redes durante toda la jornada.
 fecha: 2026-10-13
-logoCliente: /propuestas/10-26/rafcar-motors-g7qx/logo.jpg
-imagenHero: /propuestas/10-26/rafcar-motors-g7qx/hero.jpg
+logoCliente: /propuestas/produccion-audiovisual/rafcar-motors-g7qx/logo.jpg
+imagenHero: /propuestas/produccion-audiovisual/rafcar-motors-g7qx/hero.jpg
 
 situacion:
   - "**Rafcar Motors** reúne a sus clientes en la **Caravana Legado Jimny**, un recorrido que pone al Jimny en el terreno donde mejor se luce y convierte a los propietarios en protagonistas de la marca."
   - Una jornada así deja momentos que no se repiten. Si no se registran bien, se pierden; si se capturan con intención, se convierten en **contenido auténtico** para comunicar la marca durante meses.
 cita: Cada momento cuenta. **Hagamos que Legado Jimny quede en imágenes.**
 requerimiento: Cobertura fotográfica y audiovisual de la Caravana Legado Jimny, acompañando a los participantes durante toda la jornada para registrar los mejores momentos de la experiencia. Domingo 15 o 29 de noviembre de 2026 (por confirmar), de 8:00 a 17:00.
-imagenRequerimiento: /propuestas/10-26/rafcar-motors-g7qx/requerimiento.jpg
+imagenRequerimiento: /propuestas/produccion-audiovisual/rafcar-motors-g7qx/requerimiento.jpg
 
 modulos:
   - servicio: produccion-audiovisual
     titulo: Cobertura de la caravana
     subtitulo: Fotografía, video y contenido para redes
     plazo: 9 horas de cobertura
-    imagen: /propuestas/10-26/rafcar-motors-g7qx/cobertura.jpg
+    imagen: /propuestas/produccion-audiovisual/rafcar-motors-g7qx/cobertura.jpg
     estrategia: Acompañar a los participantes durante todo el recorrido para documentar la caravana, las experiencias y la participación de los clientes.
     bloques:
       - titulo: Objetivo de la cobertura
@@ -42,9 +44,9 @@ modulos:
       titulo: Experiencia en imágenes
       texto: Una selección de trabajos fotográficos y audiovisuales realizados por Jhon Orellana.
       fotos:
-        - /propuestas/10-26/rafcar-motors-g7qx/jhon-1.jpg
-        - /propuestas/10-26/rafcar-motors-g7qx/jhon-2.jpg
-        - /propuestas/10-26/rafcar-motors-g7qx/jhon-3.jpg
+        - /propuestas/produccion-audiovisual/rafcar-motors-g7qx/jhon-1.jpg
+        - /propuestas/produccion-audiovisual/rafcar-motors-g7qx/jhon-2.jpg
+        - /propuestas/produccion-audiovisual/rafcar-motors-g7qx/jhon-3.jpg
 
   - titulo: "Alternativa B: Kiwi Studio"
     subtitulo: Foto y video en un mismo equipo
@@ -59,9 +61,9 @@ modulos:
       titulo: Experiencia en imágenes
       texto: Una selección de trabajos fotográficos y audiovisuales realizados por Kiwi Studio.
       fotos:
-        - /propuestas/10-26/rafcar-motors-g7qx/kiwi-1.jpg
-        - /propuestas/10-26/rafcar-motors-g7qx/kiwi-2.jpg
-        - /propuestas/10-26/rafcar-motors-g7qx/kiwi-3.jpg
+        - /propuestas/produccion-audiovisual/rafcar-motors-g7qx/kiwi-1.jpg
+        - /propuestas/produccion-audiovisual/rafcar-motors-g7qx/kiwi-2.jpg
+        - /propuestas/produccion-audiovisual/rafcar-motors-g7qx/kiwi-3.jpg
 
 inversion:
   moneda: Bs.

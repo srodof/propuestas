@@ -1,9 +1,11 @@
 ---
+linea: eventos
+urlsAnteriores: [/10-26/urubo-downtown-gwja/]
 cliente: Urubó Downtown
 titulo: Lanzamiento Urubó Downtown
 bajada: Un lanzamiento selectivo, elegante y experiencial para presentar una nueva centralidad urbana.
 fecha: 2026-10-15
-imagenHero: /propuestas/10-26/urubo-downtown-gwja/hero.jpg
+imagenHero: /propuestas/eventos/urubo-downtown-gwja/hero.jpg
 
 situacion:
   - "**Urubó Downtown** se presenta como una **nueva centralidad urbana planificada**, no como un proyecto inmobiliario aislado: actividad económica, educación, salud, residencia, servicios, comunidad y espacios públicos integrados en una visión de largo plazo para el crecimiento de Santa Cruz."

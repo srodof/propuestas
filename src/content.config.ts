@@ -1,16 +1,18 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { agencias } from './data/agencia';
 import { servicios, idsServicios, type Paso, type Servicio } from './data/servicios';
 import { serviciosEn } from './data/servicios.en';
+import { lineas, lineasEn, idsLineas, type Linea } from './data/lineas';
 
-// Cada archivo .md en src/content/propuestas/MM-YY/ es una propuesta.
-// Lo común de SWIITCH (nosotros, servicios, clientes, método, contacto)
-// vive en src/data/agencia.ts, y el contenido por defecto de cada servicio
-// en src/data/servicios.ts; aquí va solo lo propio de cada cliente.
+// Cada archivo .md en src/content/propuestas/<linea>/ es una propuesta.
+// Lo común de SWIITCH (nosotros, servicios, clientes, contacto) vive en
+// src/data/agencia.ts, la personalización de cada línea de negocio en
+// src/data/lineas.ts y el contenido por defecto de cada servicio en
+// src/data/servicios.ts; aquí va solo lo propio de cada cliente.
 
 const paso = z.object({ titulo: z.string(), detalle: z.string().optional() });
+const tarjeta = z.object({ icono: z.string(), titulo: z.string(), texto: z.string() });
 
 const modulo = z.object({
   // Servicio de la biblioteca (src/data/servicios.ts) que da el contenido por defecto
@@ -54,6 +56,7 @@ const modulo = z.object({
 
 type Modulo = z.infer<typeof modulo>;
 const biblioteca = { es: servicios as Partial<Record<string, Servicio>>, en: serviciosEn };
+const bibliotecaLineas = { es: lineas as Partial<Record<string, Linea>>, en: lineasEn };
 
 // Junta el contenido por defecto del servicio (en el idioma de la propuesta)
 // con lo que escribió la propuesta.
@@ -81,21 +84,29 @@ const propuestas = defineCollection({
   schema: z
     .object({
       idioma: z.enum(['es', 'en']).default('es'),
+      // Línea de negocio (src/data/lineas.ts): da título, bajada, módulos,
+      // diferenciales, método y notas por defecto, y la primera parte de la URL
+      linea: z.enum(idsLineas),
       cliente: z.string(),
-      titulo: z.string(), // "Branding & Social Media Marketing"
+      titulo: z.string().optional(), // "Branding & Social Media Marketing"; por defecto, el de la línea
       fecha: z.coerce.date(),
       vigenciaDias: z.number().default(15),
       logoCliente: z.string().optional(),
       imagenHero: z.string().optional(),
-      bajada: z.string().optional(), // frase corta bajo el título del hero
+      bajada: z.string().nullish(), // frase corta bajo el título del hero; `null` la quita
+      // Links con los que se envió la propuesta antes de cambiar de URL: redirigen a la nueva
+      urlsAnteriores: z.array(z.string().regex(/^\/[a-z0-9/-]+\/$/, 'Escribe la URL como /10-26/cliente-xxxx/')).default([]),
 
       situacion: z.array(z.string()).min(1), // párrafos; **texto** va en negrita
       cita: z.string().optional(), // frase destacada al final de la situación
       requerimiento: z.string(),
       imagenRequerimiento: z.string().optional(),
 
-      modulos: z.array(modulo).default([]),
+      modulos: z.array(modulo).optional(), // por defecto, un módulo por cada servicio de la línea
       kickoff: z.array(paso).default([]),
+      // Reemplazan las tarjetas bajo el hero y los pasos de "Cómo trabajamos" de la línea
+      diferenciales: z.array(tarjeta).optional(),
+      metodo: z.array(tarjeta).optional(),
 
       inversion: z.object({
         moneda: z.string().default('Bs.'),
@@ -117,16 +128,26 @@ const propuestas = defineCollection({
         .array(z.enum(['nosotros', 'cifras', 'servicios', 'clientes', 'metodo']))
         .default([]),
     })
-    .transform(({ modulos: crudos, kickoff, inversion, ...resto }, ctx) => {
-      const modulos = crudos.map((m) => armarModulo(m, resto.idioma, ctx));
+    .transform(({ modulos: crudos, kickoff, inversion, titulo, bajada, diferenciales, metodo, ...resto }, ctx) => {
+      const linea = bibliotecaLineas[resto.idioma][resto.linea];
+      if (!linea) {
+        ctx.addIssue({ code: 'custom', message: `La línea "${resto.linea}" todavía no tiene versión en ${resto.idioma}; agrégala en lineasEn de src/data/lineas.ts.` });
+        return z.NEVER;
+      }
+      const modulos = (crudos ?? linea.servicios.map((servicio) => ({ servicio }))).map((m) => armarModulo(m, resto.idioma, ctx));
       // Sin kick off propio, se juntan los de cada servicio sin repetir pasos
       const pasos = kickoff.length > 0 ? kickoff : modulos.flatMap((m) => m.kickoffServicio);
       const vistos = new Set<string>();
       return {
         ...resto,
+        nombreLinea: linea.nombre,
+        titulo: titulo ?? linea.titulo,
+        bajada: bajada === undefined ? linea.bajada : bajada ?? undefined,
+        diferenciales: diferenciales ?? linea.diferenciales,
+        metodo: metodo ?? linea.metodo,
         modulos: modulos.map(({ kickoffServicio, ...m }) => m),
         kickoff: pasos.filter((p) => !vistos.has(p.titulo) && vistos.add(p.titulo)),
-        inversion: { ...inversion, notas: inversion.notas.length > 0 ? inversion.notas : agencias[resto.idioma].notasInversion },
+        inversion: { ...inversion, notas: inversion.notas.length > 0 ? inversion.notas : linea.notasInversion },
       };
     }),
 });
