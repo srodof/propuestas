@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+
+// Los links que se enviaron antes de cambiar el formato de la URL
+// (`urlsAnteriores` en cada propuesta) llevan a su dirección actual.
+export async function getStaticPaths() {
+  const propuestas = await getCollection('propuestas');
+  return propuestas.flatMap((p) =>
+    p.data.urlsAnteriores.map((url) => ({
+      params: { anterior: url.slice(1, -1) },
+      props: { destino: `/${p.id}/` },
+    })),
+  );
+}
+
+const { destino } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content={`0; url=${destino}`} />
+    <link rel="canonical" href={destino} />
+    <title>SWIITCH</title>
+    <script is:inline define:vars={{ destino }}>location.replace(destino + location.hash);</script>
+  </head>
+  <body>
+    <a href={destino}>Ver la propuesta</a>
+  </body>
+</html>

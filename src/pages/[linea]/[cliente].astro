@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Propuesta from '../../layouts/Propuesta.astro';
+
+// Cada propuesta vive en src/content/propuestas/<linea>/cliente-codigo.md
+// y se publica en /<linea>/cliente-codigo/ (p. ej. /eventos/urubo-downtown-gwja/).
+export async function getStaticPaths() {
+  const propuestas = await getCollection('propuestas');
+  return propuestas.map((p) => {
+    // El nombre termina en un código de 4 caracteres para que la URL no se pueda adivinar.
+    const m = p.id.match(/^([a-z-]+)\/([a-z0-9-]+-[a-z0-9]{4})$/);
+    if (!m) {
+      throw new Error(`"${p.id}": guarda la propuesta como src/content/propuestas/<linea>/nombre-del-cliente-xxxx.md (usa npm run nueva).`);
+    }
+    const [, linea, cliente] = m;
+    if (linea !== p.data.linea) {
+      throw new Error(`"${p.id}": la carpeta ${linea} no coincide con la línea de la propuesta (${p.data.linea}).`);
+    }
+    return { params: { linea, cliente }, props: { p } };
+  });
+}
+
+const { p } = Astro.props;
+---
+<Propuesta data={p.data} />

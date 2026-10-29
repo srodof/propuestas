@@ -1,12 +1,14 @@
 ---
+linea: social-media
+urlsAnteriores: [/10-26/mccuskey-t7nn/]
 idioma: en
 cliente: McCuskey
 titulo: White-Label Social Media Marketing
 bajada: A partnership to add social media to McCuskey's services, with your brand in front of the client and our team behind the work.
 fecha: 2026-10-11
 vigenciaDias: 15
-logoCliente: /propuestas/10-26/mccuskey-t7nn/logo.png
-imagenHero: /propuestas/10-26/mccuskey-t7nn/hero.jpg
+logoCliente: /propuestas/social-media/mccuskey-t7nn/logo.png
+imagenHero: /propuestas/social-media/mccuskey-t7nn/hero.jpg
 
 situacion:
   - "**McCuskey** already has the structure, the reputation and the client relationships in the United States. Its clients trust it with complex decisions, and many of them also need a steady, professional presence on social media."
@@ -14,7 +16,7 @@ situacion:
   - This partnership lets McCuskey offer **Social Media Marketing under its own brand**, with SWIITCH running the full operation from Bolivia.
 cita: Your clients see **one brand**. Behind it, a **full social media team** working under your name.
 requerimiento: McCuskey is looking for a delivery partner to offer Social Media Marketing to its clients as a McCuskey service. SWIITCH handles the work end to end, while McCuskey keeps the client relationship, the pricing and the brand.
-imagenRequerimiento: /propuestas/10-26/mccuskey-t7nn/requerimiento.jpg
+imagenRequerimiento: /propuestas/social-media/mccuskey-t7nn/requerimiento.jpg
 
 modulos:
   - servicio: social-media

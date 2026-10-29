@@ -85,7 +85,7 @@ const nav = [
             <h1 class="hero__titulo" data-reveal="up" style="--d:120ms">{data.titulo}</h1>
             {data.bajada && <p class="hero__bajada" data-reveal="up" style="--d:240ms">{data.bajada}</p>}
             <p class="hero__meta" data-reveal="up" style="--d:320ms">
-              {mesAnio}
+              {mesAnio} <span aria-hidden="true">·</span> {data.nombreLinea}
             </p>
           </div>
           {data.imagenHero && (
@@ -101,9 +101,9 @@ const nav = [
         </div>
       </section>
 
-      <!-- Diferenciales de SWIITCH: tarjetas que suben sobre el hero -->
+      <!-- Diferenciales de la línea de negocio: tarjetas que suben sobre el hero -->
       <div class="wrap resumen" aria-label={t.porQue}>
-        {agencia.diferenciales.map((d, i) => (
+        {data.diferenciales.map((d, i) => (
           <article class="tarjeta tarjeta--fill" tabindex="0" data-reveal="up" style={`--d:${i * 120}ms`}>
             <span class="tarjeta__icono"><Icon name={d.icono} size={44} stroke={1.5} /></span>
             <h3>{d.titulo}</h3>
@@ -198,7 +198,7 @@ const nav = [
             <p class="eyebrow" data-reveal="left">{t.comoTrabajamos}</p>
             <h2 data-reveal="up">{t.unMetodo}</h2>
             <ol class="metodo">
-              {agencia.metodo.map((m, i) => (
+              {data.metodo.map((m, i) => (
                 <li data-reveal="up" style={`--d:${i * 140}ms`}>
                   <span class="metodo__icono"><Icon name={m.icono} size={56} stroke={1.5} /></span>
                   <span class="metodo__num">{dos(i)}</span>

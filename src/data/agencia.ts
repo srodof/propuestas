@@ -1,6 +1,8 @@
 // Contenido fijo de SWIITCH: aparece igual en todas las propuestas.
 // Se edita una sola vez aquí y cada propuesta puede ocultar secciones
-// con `ocultar` en su frontmatter.
+// con `ocultar` en su frontmatter. Los diferenciales, los pasos de "Cómo
+// trabajamos" y las notas de inversión cambian según la línea de negocio
+// y están en src/data/lineas.ts.
 
 export const agencia = {
   nosotros: {
@@ -14,24 +16,6 @@ export const agencia = {
     imagen: '/marca/equipo.jpg',
   },
 
-  // Tres diferenciales que se muestran justo debajo del hero
-  diferenciales: [
-    {
-      icono: 'trending-up',
-      titulo: 'Agencia boutique enfocada en resultados',
-      texto: 'Trato cercano y socios directores con más de 15 años de experiencia involucrados en cada definición, con la mirada puesta en los resultados de tu negocio.',
-    },
-    {
-      icono: 'target',
-      titulo: 'Estrategias a medida',
-      texto: 'No vendemos paquetes genéricos: diseñamos cada solución para el desafío específico de tu empresa y te acompañamos en la ejecución.',
-    },
-    {
-      icono: 'users',
-      titulo: 'Equipo multidisciplinario',
-      texto: 'Expertos en cada área de la empresa para entregarte los mejores resultados.',
-    },
-  ],
 
   cifras: [
     { valor: 15, sufijo: '+', etiqueta: 'Años de experiencia' },
@@ -64,35 +48,7 @@ export const agencia = {
     'colorshop', 'cuarta-dimension', 'helados-cayara', 'iu', 'memorial-park', 'rafcar', 'tl-attorneys',
   ],
 
-  metodo: [
-    {
-      titulo: 'Análisis',
-      icono: 'search',
-      texto: 'Partimos de una investigación interna y externa de la empresa, identificando oportunidades de negocio en sintonía emocional con tu mercado.',
-    },
-    {
-      titulo: 'Estrategia',
-      icono: 'target',
-      texto: 'Ideamos soluciones que generan valor, innovación y experiencias centradas en el usuario para posicionar tu marca en la mente y el corazón de tus consumidores.',
-    },
-    {
-      titulo: 'Ejecución',
-      icono: 'trending-up',
-      texto: 'Implementamos los procesos y te acompañamos en las actividades necesarias para atraer nuevos clientes, fidelizar los actuales y diferenciar tu negocio.',
-    },
-    {
-      titulo: 'Medición',
-      icono: 'bar-chart',
-      texto: 'Lo que no se mide no se puede mejorar. Medimos el retorno de tu inversión y evaluamos resultados para alcanzar tus objetivos.',
-    },
-  ],
 
-  // Notas de inversión que se usan si la propuesta no escribe las suyas
-  notasInversion: [
-    'Los montos se estimaron según las horas de trabajo de los integrantes del equipo. El perfil de nuestra agencia establece una dedicación relevante de los socios directores, que aportan su experiencia en las definiciones.',
-    'El fee de agencia no incluye la inversión publicitaria. Todos los gastos en medios pagados serán aprobados y financiados directamente por el cliente.',
-    'Cualquier producción audiovisual necesaria (videos, fotografía profesional, modelos e influencers, alquiler de espacios y escenografías) no está incluida en el fee de agencia y requerirá un presupuesto y aprobación por separado.',
-  ],
 
   contacto: {
     direccion: ['Av. San Martín, Calle J', 'Edificio Manzana 40, Torre 2, Piso 9', 'Santa Cruz de la Sierra, Bolivia'],
@@ -131,23 +87,6 @@ export const agenciaEn: typeof agencia = {
       "Our mission is simple: to meet and exceed our clients' goals, whether they are about brand, sales or any other objective that matters to their success.",
     imagen: agencia.nosotros.imagen,
   },
-  diferenciales: [
-    {
-      icono: 'trending-up',
-      titulo: 'A boutique agency focused on results',
-      texto: 'Close collaboration, with managing partners who bring more than 15 years of experience to every decision and keep their eyes on your business results.',
-    },
-    {
-      icono: 'target',
-      titulo: 'Tailored strategies',
-      texto: 'We do not sell generic packages: we design every solution for the specific challenge in front of us and stay with you through execution.',
-    },
-    {
-      icono: 'users',
-      titulo: 'Multidisciplinary team',
-      texto: 'Specialists in every area of the business, working together to deliver the best results.',
-    },
-  ],
   cifras: [
     { valor: 15, sufijo: '+', etiqueta: 'Years of experience' },
     { valor: 30, sufijo: '+', etiqueta: 'Brands that trust us' },
@@ -158,17 +97,6 @@ export const agenciaEn: typeof agencia = {
     { area: 'Marketing', icono: 'target', items: ['Social Media Marketing', 'Influencer Marketing', 'Web Design', 'Marketing Advisory'] },
     { area: 'Communications', icono: 'users', items: ['Corporate Communications', 'Public Relations', 'Event Management'] },
     { area: 'Advertising', icono: 'trending-up', items: ['Creative Advertising', 'Branding and Corporate Identity', 'BTL and Activations', 'Media Planning and Buying'] },
-  ],
-  metodo: [
-    { titulo: 'Analysis', icono: 'search', texto: 'We start with internal and external research on the company, finding business opportunities that connect emotionally with your market.' },
-    { titulo: 'Strategy', icono: 'target', texto: 'We create solutions that build value, innovation and user-centered experiences to place your brand in the minds and hearts of your customers.' },
-    { titulo: 'Execution', icono: 'trending-up', texto: 'We put the processes in place and stay with you through the activities needed to win new customers, keep current ones and set your business apart.' },
-    { titulo: 'Measurement', icono: 'bar-chart', texto: 'What is not measured cannot be improved. We measure the return on your investment and evaluate results to reach your goals.' },
-  ],
-  notasInversion: [
-    'Fees were estimated based on the working hours of the team members involved. Our agency model includes significant involvement from the managing partners, who bring their experience to every key decision.',
-    'Agency fees do not include advertising spend. All paid media costs are approved and paid directly by the client.',
-    'Any audiovisual production required (video, professional photography, models and influencers, venue and set rental) is not included in the agency fee and will be quoted and approved separately.',
   ],
   contacto: {
     ...agencia.contacto,

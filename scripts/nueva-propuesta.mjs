@@ -1,26 +1,25 @@
-// Crea una propuesta nueva a partir de plantilla-propuesta.md.
-// Uso: npm run nueva -- "Nombre del cliente" [MM-YY] [--servicios desarrollo-web,branding]
-// Genera src/content/propuestas/MM-YY/nombre-del-cliente-xxxx.md y la
-// carpeta de imágenes public/propuestas/MM-YY/nombre-del-cliente-xxxx/.
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+// Crea una propuesta nueva a partir de la plantilla de su línea de negocio
+// (plantillas/<linea>.md).
+// Uso: npm run nueva -- <linea> "Nombre del cliente" [--servicios desarrollo-web,branding]
+// Genera src/content/propuestas/<linea>/nombre-del-cliente-xxxx.md y la
+// carpeta de imágenes public/propuestas/<linea>/nombre-del-cliente-xxxx/.
+import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { randomInt } from 'node:crypto';
 
+const uso = 'Uso: npm run nueva -- <linea> "Nombre del cliente" [--servicios desarrollo-web,branding]';
 const args = process.argv.slice(2);
 const iServicios = args.indexOf('--servicios');
 const pedidos = iServicios >= 0 ? (args.splice(iServicios, 2)[1] ?? '').split(',').filter(Boolean) : [];
-const [cliente, mesArg] = args;
-if (!cliente) {
-  console.error('Uso: npm run nueva -- "Nombre del cliente" [MM-YY] [--servicios desarrollo-web,branding]');
+const [linea, cliente] = args;
+const lineas = readdirSync('plantillas').filter((f) => f.endsWith('.md')).map((f) => f.slice(0, -3));
+if (!linea || !cliente) {
+  console.error(`${uso}\nLíneas: ${lineas.join(', ')}.`);
   process.exit(1);
 }
-
-const hoy = new Date();
-const mes = mesArg ?? `${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getFullYear()).slice(-2)}`;
-if (!/^\d{2}-\d{2}$/.test(mes)) {
-  console.error(`El mes debe tener el formato MM-YY (recibí "${mes}").`);
+if (!lineas.includes(linea)) {
+  console.error(`Línea desconocida: ${linea}. Disponibles: ${lineas.join(', ')}.`);
   process.exit(1);
 }
-const [mm, yy] = mes.split('-');
 
 const nombre = cliente
   .toLowerCase()
@@ -32,7 +31,7 @@ const letras = 'abcdefghjkmnpqrstuvwxyz23456789';
 const codigo = Array.from({ length: 4 }, () => letras[randomInt(letras.length)]).join('');
 const slug = `${nombre}-${codigo}`;
 
-const archivo = `src/content/propuestas/${mes}/${slug}.md`;
+const archivo = `src/content/propuestas/${linea}/${slug}.md`;
 if (existsSync(archivo)) {
   console.error(`Ya existe ${archivo}, vuelve a intentarlo.`);
   process.exit(1);
@@ -46,17 +45,20 @@ if (malos.length > 0) {
   process.exit(1);
 }
 
-let plantilla = readFileSync('plantilla-propuesta.md', 'utf8')
+const hoy = new Date().toISOString().slice(0, 10);
+let plantilla = readFileSync(`plantillas/${linea}.md`, 'utf8')
   .replace(/^cliente: .*$/m, `cliente: ${cliente}`)
-  .replace(/^fecha: .*$/m, `fecha: 20${yy}-${mm}-01`);
+  .replace(/^fecha: .*$/m, `fecha: ${hoy}`)
+  .replaceAll('cliente-xxxx', slug);
+// Servicios extra: se agregan como módulos después del de la línea
 if (pedidos.length > 0) {
-  plantilla = plantilla.replace(/^  - servicio: .*$/m, pedidos.map((p) => `  - servicio: ${p}`).join('\n'));
+  plantilla = plantilla.replace(/^inversion:$/m, `${pedidos.map((p) => `  - servicio: ${p}`).join('\n')}\ninversion:`);
 }
 
-mkdirSync(`src/content/propuestas/${mes}`, { recursive: true });
-mkdirSync(`public/propuestas/${mes}/${slug}`, { recursive: true });
+mkdirSync(`src/content/propuestas/${linea}`, { recursive: true });
+mkdirSync(`public/propuestas/${linea}/${slug}`, { recursive: true });
 writeFileSync(archivo, plantilla);
 
 console.log(`Propuesta creada: ${archivo}`);
-console.log(`Imágenes en:      public/propuestas/${mes}/${slug}/`);
-console.log(`URL:              https://propuestas.swiitchad.com/${mes}/${slug}/`);
+console.log(`Imágenes en:      public/propuestas/${linea}/${slug}/`);
+console.log(`URL:              https://propuestas.swiitchad.com/${linea}/${slug}/`);

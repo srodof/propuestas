@@ -142,6 +142,75 @@ export const servicios = {
     ],
   },
 
+  'relaciones-publicas': {
+    titulo: 'Relaciones públicas',
+    subtitulo: 'Tu marca en la conversación',
+    estrategia:
+      'Construimos la presencia de la marca en los medios a partir de historias con valor noticioso: lanzamientos, logros, datos y voceros que tienen algo que decir. El objetivo es que la marca aparezca en los espacios correctos, con el mensaje correcto y de forma sostenida.',
+    enfoque: 'Cobertura ganada y relación de largo plazo con los medios, no apariciones aisladas.',
+    incluye: [
+      'Diagnóstico de la presencia actual de la marca en los medios.',
+      'Definición de mensajes clave, temas y voceros.',
+      'Mapa de medios y periodistas relevantes para la marca.',
+      'Redacción y distribución de notas de prensa.',
+      'Gestión de entrevistas y apariciones en prensa, radio, televisión y medios digitales.',
+      'Preparación de voceros (media training).',
+      'Monitoreo de medios y reporte mensual de apariciones.',
+    ],
+    kickoff: [
+      ...kickoffBase,
+      { titulo: 'Diagnóstico de medios', detalle: 'Cómo aparece hoy la marca y qué se dice de ella.' },
+      { titulo: 'Mensajes y voceros', detalle: 'Temas a instalar y personas que hablarán por la marca.' },
+      { titulo: 'Plan de prensa', detalle: 'Calendario de notas, entrevistas y acciones con medios.' },
+    ],
+  },
+
+  influencers: {
+    titulo: 'Marketing de influencers',
+    subtitulo: 'Voces que generan confianza',
+    estrategia:
+      'Elegimos creadores de contenido cuya audiencia coincide con el público de la marca y cuya forma de comunicar es coherente con sus valores. Cada colaboración tiene un objetivo claro, un brief que respeta la voz del creador y una medición que muestra qué funcionó.',
+    enfoque: 'Pocos perfiles bien elegidos antes que muchos sin afinidad con la marca.',
+    incluye: [
+      'Búsqueda, evaluación y selección de perfiles según audiencia, afinidad y calidad de contenido.',
+      'Negociación de entregables, fechas, derechos de uso y honorarios.',
+      'Brief creativo para cada creador.',
+      'Revisión y aprobación del contenido antes de su publicación.',
+      'Coordinación de envíos de producto, visitas o asistencia a eventos.',
+      'Seguimiento de publicaciones y reporte de resultados por creador.',
+    ],
+    kickoff: [
+      ...kickoffBase,
+      { titulo: 'Shortlist de perfiles', detalle: 'Creadores propuestos con su audiencia y métricas para aprobación.' },
+      { titulo: 'Negociación y contratos', detalle: 'Entregables, fechas y honorarios acordados con cada creador.' },
+      { titulo: 'Brief y contenidos', detalle: 'Briefs enviados y contenidos revisados antes de publicar.' },
+    ],
+  },
+
+  btl: {
+    titulo: 'BTL y activaciones',
+    subtitulo: 'La marca en el punto de contacto',
+    estrategia:
+      'Diseñamos activaciones que acercan la marca a las personas en el lugar donde toman la decisión: punto de venta, eventos, centros comerciales o la calle. Cada activación parte de un objetivo concreto (prueba de producto, captación de datos, ventas o notoriedad) y de una mecánica simple que invita a participar.',
+    enfoque: 'Experiencias cuidadas en cada detalle, con un equipo en campo que representa bien a la marca.',
+    incluye: [
+      'Concepto creativo y mecánica de la activación.',
+      'Diseño de stand, materiales gráficos y merchandising.',
+      'Selección y capacitación de promotores.',
+      'Coordinación de puntos, fechas, permisos y logística.',
+      'Supervisión en campo durante cada jornada.',
+      'Registro fotográfico y contenido para redes.',
+      'Informe final con contactos, participación y resultados.',
+    ],
+    kickoff: [
+      ...kickoffBase,
+      { titulo: 'Concepto y mecánica', detalle: 'Idea creativa y dinámica con el público para aprobación.' },
+      { titulo: 'Puntos y calendario', detalle: 'Lugares, fechas, horarios y permisos confirmados.' },
+      { titulo: 'Producción de materiales', detalle: 'Stand, gráficas y merchandising listos para la activación.' },
+      { titulo: 'Capacitación de promotores', detalle: 'Mensajes, mecánica y protocolo antes de salir a campo.' },
+    ],
+  },
+
   'produccion-audiovisual': {
     titulo: 'Producción fotográfica y audiovisual',
     subtitulo: 'Una biblioteca visual propia',
