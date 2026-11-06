@@ -13,7 +13,7 @@ const t = textos[data.idioma];
 const agencia = agencias[data.idioma];
 const fmt = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
 const vence = new Date(data.fecha);
-vence.setDate(vence.getDate() + data.vigenciaDias);
+vence.setDate(vence.getDate() + (data.vigenciaDias ?? 0));
 const mes = new Intl.DateTimeFormat(t.locale, { month: 'long', timeZone: 'UTC' }).format(data.fecha);
 const mesAnio = `${mes.charAt(0).toUpperCase()}${mes.slice(1)} ${data.fecha.getUTCFullYear()}`;
 const ver = (s: string) => !data.ocultar.includes(s as never);
@@ -21,7 +21,7 @@ const dos = (n: number) => String(n + 1).padStart(2, '0');
 const slug = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-const { contacto } = agencia;
+const contacto = { ...agencia.contacto, ...(data.email ? { email: data.email } : {}) };
 const mensaje = encodeURIComponent(t.mensajeWhatsapp(data.titulo, data.cliente));
 const whatsapp = `https://wa.me/${contacto.whatsapp}?text=${mensaje}`;
 // Texto con **negritas**: se escapa el HTML y solo se convierte el doble asterisco
@@ -393,7 +393,7 @@ const nav = [
               <p class="eyebrow" data-reveal="left">{t.inversion}</p>
               <h2 data-reveal="up">{t.planes}</h2>
             </div>
-            <p class="texto cabecera__lado" data-reveal="up">{t.validaHasta(fmt.format(vence))}</p>
+            {data.vigenciaDias !== null && <p class="texto cabecera__lado" data-reveal="up">{t.validaHasta(fmt.format(vence))}</p>}
           </div>
           <div class="precios">
             {data.inversion.items.map((it, i) => (
@@ -550,13 +550,10 @@ const nav = [
       @media (min-width: 768px) { .texto { text-align: justify; hyphens: auto; } }
       .estrecho-izq { max-width: 760px; }
 
-      /* Antetítulo con la raya roja de la referencia */
+      /* Antetítulo en rojo, sin raya delante */
       .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 0.75rem; color: var(--primary); font: 700 14px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 1px; }
-      .eyebrow::before { content: ''; width: 40px; height: 2px; background: currentColor; flex: none; }
       .eyebrow--dark { color: #fff; }
-      .eyebrow--dark::before { background: var(--primary); }
       .eyebrow--centro { justify-content: center; }
-      .eyebrow:has(.switch)::before { display: none; }
 
       /* Motivo de marca: interruptor que se enciende al cargar */
       .switch { width: 40px; height: 22px; border-radius: 9999px; background: rgba(255, 255, 255, 0.25); position: relative; flex: none; animation: sw-bg 0.5s 0.6s var(--ease) forwards; }
@@ -734,7 +731,6 @@ const nav = [
       .bloque--rojo { background: var(--primary); color: #fff; }
       .bloque--rojo h4 { color: #fff; }
       .sub { font: 700 21px/1.4 var(--font-sans); margin: 0 0 1rem; display: flex; align-items: center; gap: 12px; }
-      .sub::before { content: ''; width: 24px; height: 2px; background: var(--primary); }
       .incluye, .extra { margin-top: clamp(40px, 5vw, 64px); }
       .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px 40px; }
       @media (min-width: 768px) { .checks:not(.checks--una) { grid-template-columns: 1fr 1fr; } }
@@ -751,7 +747,6 @@ const nav = [
       /* Kick off */
       .kickoff { background: var(--primary); color: #fff; }
       .kickoff h2 { color: #fff; }
-      .kickoff .eyebrow--dark::before { background: #fff; }
       .kickoff__pasos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
       .kickoff__pasos li { background: var(--primary); padding: 28px 24px; border: 1px solid rgba(255, 255, 255, 0.35); margin: 0 -1px -1px 0; transition: background-color 0.3s ease; }
       .kickoff__pasos li:hover { background: var(--primary-hover); }

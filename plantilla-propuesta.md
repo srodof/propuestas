@@ -10,7 +10,8 @@ cliente: Cliente de Ejemplo
 titulo: Estrategia de marketing digital
 bajada: Una frase corta que resuma lo que proponemos.
 fecha: 2026-10-07
-vigenciaDias: 15
+vigenciaDias: 15   # null para no mostrar la validez
+# email: nombre@swiitchad.com   (correo de contacto propio; por defecto srodo@swiitchad.com)
 situacion:
   - Contexto del cliente, su momento actual y por qué busca una agencia. Usa **dobles asteriscos** para negritas.
 # cita: Una frase destacada sobre el desafío.

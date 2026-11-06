@@ -84,7 +84,8 @@ const propuestas = defineCollection({
       cliente: z.string(),
       titulo: z.string(), // "Branding & Social Media Marketing"
       fecha: z.coerce.date(),
-      vigenciaDias: z.number().default(15),
+      vigenciaDias: z.number().nullable().default(15), // null: no muestra la validez
+      email: z.string().email().optional(), // correo de contacto propio de esta propuesta
       logoCliente: z.string().optional(),
       imagenHero: z.string().optional(),
       bajada: z.string().optional(), // frase corta bajo el título del hero
