@@ -4,7 +4,6 @@ titulo: Social Media Marketing
 bajada: La misma estrategia regional de Prudence, contada para Bolivia con el tono, las palabras y los públicos de aquí.
 fecha: 2026-11-01
 vigenciaDias: null
-email: srodo@swiitchad.com
 imagenHero: /propuestas/11-26/prudence-2526/hero.jpg
 
 situacion:
