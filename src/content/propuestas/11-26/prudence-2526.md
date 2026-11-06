@@ -73,7 +73,6 @@ inversion:
       incluye: [16 publicaciones al mes, Historias y destacadas, Community management y SAC, Administración de pauta, Reporte mensual]
   notas:
     - El fee de agencia no incluye la inversión publicitaria, que es aprobada y pagada directamente por DKT. Como referencia, el always on de alrededor de USD 250 al mes y las campañas puntuales como Sin Vergüenza se suman a la pauta, no al fee.
-    - El manejo de TikTok para Bolivia puede sumarse como un módulo aparte, con su propia estrategia y cantidad de piezas.
     - Cualquier producción audiovisual necesaria (videos, fotografía profesional, modelos e influencers, alquiler de espacios y escenografías) no está incluida en el fee y requerirá un presupuesto y aprobación por separado.
     - El servicio puede facturarse dentro de la campaña institucional de DKT, como un segundo rubro.
 ---
