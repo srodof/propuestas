@@ -3,7 +3,8 @@ cliente: Prudence
 titulo: Social Media Marketing
 bajada: La misma estrategia regional de Prudence, contada para Bolivia con el tono, las palabras y los públicos de aquí.
 fecha: 2026-11-01
-vigenciaDias: 15
+vigenciaDias: null
+email: srodo@swiitchad.com
 imagenHero: /propuestas/11-26/prudence-2526/hero.jpg
 
 situacion:
@@ -11,7 +12,7 @@ situacion:
   - "A diferencia de la competencia, que en su mayoría son laboratorios, Prudence no compite por precio ni por cantidad de caras visibles. Su diferencia es el **marketing educativo**: una misión de planificación familiar y de prevención del VIH y las ITS, en un momento en que estas infecciones están en alza en Bolivia."
   - "En una cultura que todavía habla de sexo con vergüenza, la marca necesita ser **entretenida y cercana sin descuidar las políticas de las plataformas**, que en el pasado ya restringieron sus cuentas."
 cita: Una marca que habla de sexo **sin vergüenza**, con el idioma de cada público y en la red correcta.
-requerimiento: Manejo de las redes sociales de Prudence Bolivia en Instagram y Facebook, alineado a la estrategia de DKT y de la región. Incluye la atención a la comunidad, la publicación del contenido de sampling y activaciones en calle, y la administración de la pauta mensual. Inicio previsto el 1 de enero de 2027.
+requerimiento: Manejo de las redes sociales de Prudence Bolivia en Instagram y Facebook, alineado a la estrategia de DKT y de la región. Incluye la publicación del contenido de sampling y activaciones en calle y la administración de la pauta mensual. Inicio previsto el 1 de enero de 2027.
 
 modulos:
   - servicio: social-media
@@ -39,7 +40,6 @@ modulos:
     incluye:
       - "Generación de contenido mensual: 16 publicaciones entre Instagram y Facebook, adaptadas a cada red."
       - Historias e historias destacadas con el contenido de sampling y activaciones en calle.
-      - Community management y atención a consultas (SAC) en horario de oficina, de lunes a viernes.
       - Optimización y administración de las páginas de Instagram y Facebook de Prudence Bolivia.
       - Planificación y administración de la pauta always on y de campañas puntuales.
       - Monitoreo diario de anuncios y KPIs en Meta Business y Metricool.
@@ -70,7 +70,7 @@ inversion:
       monto: "1.000"
       periodo: / mes
       destacado: true
-      incluye: [16 publicaciones al mes, Historias y destacadas, Community management y SAC, Administración de pauta, Reporte mensual]
+      incluye: [16 publicaciones al mes, Historias y destacadas, Administración de pauta, Reporte mensual]
   notas:
     - El fee de agencia no incluye la inversión publicitaria, que es aprobada y pagada directamente por DKT. Como referencia, el always on de alrededor de USD 250 al mes y las campañas puntuales como Sin Vergüenza se suman a la pauta, no al fee.
     - Cualquier producción audiovisual necesaria (videos, fotografía profesional, modelos e influencers, alquiler de espacios y escenografías) no está incluida en el fee y requerirá un presupuesto y aprobación por separado.

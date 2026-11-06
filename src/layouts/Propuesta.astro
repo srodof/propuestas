@@ -13,7 +13,7 @@ const t = textos[data.idioma];
 const agencia = agencias[data.idioma];
 const fmt = new Intl.DateTimeFormat(t.locale, { day: 'numeric', month: 'long', year: 'numeric' });
 const vence = new Date(data.fecha);
-vence.setDate(vence.getDate() + data.vigenciaDias);
+vence.setDate(vence.getDate() + (data.vigenciaDias ?? 0));
 const mes = new Intl.DateTimeFormat(t.locale, { month: 'long', timeZone: 'UTC' }).format(data.fecha);
 const mesAnio = `${mes.charAt(0).toUpperCase()}${mes.slice(1)} ${data.fecha.getUTCFullYear()}`;
 const ver = (s: string) => !data.ocultar.includes(s as never);
@@ -21,7 +21,7 @@ const dos = (n: number) => String(n + 1).padStart(2, '0');
 const slug = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-const { contacto } = agencia;
+const contacto = { ...agencia.contacto, ...(data.email ? { email: data.email } : {}) };
 const mensaje = encodeURIComponent(t.mensajeWhatsapp(data.titulo, data.cliente));
 const whatsapp = `https://wa.me/${contacto.whatsapp}?text=${mensaje}`;
 // Texto con **negritas**: se escapa el HTML y solo se convierte el doble asterisco
@@ -393,7 +393,7 @@ const nav = [
               <p class="eyebrow" data-reveal="left">{t.inversion}</p>
               <h2 data-reveal="up">{t.planes}</h2>
             </div>
-            <p class="texto cabecera__lado" data-reveal="up">{t.validaHasta(fmt.format(vence))}</p>
+            {data.vigenciaDias !== null && <p class="texto cabecera__lado" data-reveal="up">{t.validaHasta(fmt.format(vence))}</p>}
           </div>
           <div class="precios">
             {data.inversion.items.map((it, i) => (
