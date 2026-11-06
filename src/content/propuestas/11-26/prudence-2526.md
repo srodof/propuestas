@@ -4,6 +4,7 @@ titulo: Social Media Marketing
 bajada: La misma estrategia regional de Prudence, contada para Bolivia con el tono, las palabras y los públicos de aquí.
 fecha: 2026-11-01
 vigenciaDias: 15
+imagenHero: /propuestas/11-26/prudence-2526/hero.jpg
 
 situacion:
   - "**Prudence**, marca de **DKT**, ya tiene una estrategia regional y un personaje propio con personalidad. Ahora cada país maneja su cuenta con la misma línea, y el desafío es **llegar a cada usuario de Bolivia de la forma correcta**, con sus costumbres y su manera de hablar."
